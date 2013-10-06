@@ -5,6 +5,7 @@ import com.alex.gl.core.action.SecondsTimer;
 import com.alex.gl.entity.Rect;
 import com.alex.gl.entity.Score;
 import com.alex.gl.entity.Settings;
+import net.java.games.input.Controller;
 import org.apache.commons.lang.SystemUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -44,6 +45,7 @@ public class GlFrame {
     private Point timePoint;
     private SecondsTimer timer;
     private Settings settings;
+    private Controller joystick = ActionUtil.initJoystick();
 
     public GlFrame(Settings settings) {
         this.settings = settings;
@@ -58,20 +60,6 @@ public class GlFrame {
         startMainLoop();
     }
 
-    private void initTimer(int startSeconds) {
-        timer = new SecondsTimer(1000, startSeconds);
-    }
-
-    private void initInterface() {
-        int topBorder = (int) (Display.getHeight() * 0.15);
-        int bottomBorder = (int)(Display.getHeight() * 0.85);
-        topBorderOffset = (int)(Display.getHeight() * 0.01);
-        timeRect = new Rect(halfWidth - 200, 0, halfWidth + 200, topBorder);
-        redRect = new Rect(0, topBorder, halfWidth, bottomBorder);
-        blueRect = new Rect(halfWidth, topBorder, Display.getWidth(), bottomBorder);
-        timePoint = new Point(timeRect.x + 90, timeRect.y + 15);
-    }
-
     private void hardInit() {
         try {
             DisplayMode displayMode = new DisplayMode(WIDTH, HEIGHT);
@@ -83,20 +71,6 @@ public class GlFrame {
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
-    }
-
-    private void initFont() {
-        try {
-            InputStream inputStream	= ResourceLoader.getResourceAsStream("ADLER.TTF");
-            Font font2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-            font2 = font2.deriveFont(72f);
-            trueFont2 = new TrueTypeFont(font2, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-        Font font = new Font("Arial", Font.BOLD, 72);
-        trueFont1 = new TrueTypeFont(font, true);
     }
 
     private void displayInit() {
@@ -117,6 +91,34 @@ public class GlFrame {
         gluOrtho2D(0, Display.getWidth(), Display.getHeight(), 0);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+    }
+
+    private void initFont() {
+        try {
+            InputStream inputStream	= ResourceLoader.getResourceAsStream("ADLER.TTF");
+            Font font2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            font2 = font2.deriveFont(72f);
+            trueFont2 = new TrueTypeFont(font2, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+        Font font = new Font("Arial", Font.BOLD, 72);
+        trueFont1 = new TrueTypeFont(font, true);
+    }
+
+    private void initInterface() {
+        int topBorder = (int) (Display.getHeight() * 0.15);
+        int bottomBorder = (int)(Display.getHeight() * 0.85);
+        topBorderOffset = (int)(Display.getHeight() * 0.01);
+        timeRect = new Rect(halfWidth - 200, 0, halfWidth + 200, topBorder);
+        redRect = new Rect(0, topBorder, halfWidth, bottomBorder);
+        blueRect = new Rect(halfWidth, topBorder, Display.getWidth(), bottomBorder);
+        timePoint = new Point(timeRect.x + 90, timeRect.y + 15);
+    }
+
+    private void initTimer(int startSeconds) {
+        timer = new SecondsTimer(1000, startSeconds);
     }
 
     private void startMainLoop() {
@@ -173,6 +175,7 @@ public class GlFrame {
 
     private void keyDetector() {
         ActionUtil.controlDetect(score, timer);
+        ActionUtil.joyDetect(joystick);
     }
 
     private void attachFullScreenMode(DisplayMode current) {
