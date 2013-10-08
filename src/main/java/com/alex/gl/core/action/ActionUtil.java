@@ -74,20 +74,14 @@ public class ActionUtil {
 
         if (joystick == null) {
             System.err.println("No joystick was found.");
-            System.exit(1);
         }
 
-        for (Component c : joystick.getComponents()) {
-            System.out.println(c.getName());
-        }
-        
         return joystick;
     }
 
     public static void joyDetect(Controller controller) {
         controller.poll();
         boolean button1 = false;
-        boolean button10 = false;
         boolean button2 = false;
         boolean button3 = false;
         boolean button4 = false;
@@ -96,38 +90,38 @@ public class ActionUtil {
         boolean button7 = false;
         boolean button8 = false;
         boolean button9 = false;
+        boolean button10 = false;
         for (Component c : controller.getComponents()) {
-            if (c.getName().contains("1")) {
+            if (c.getName().contains("0")) {
                 button1 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("2")) {
+            if (c.getName().contains("1")) {
                 button2 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("3")) {
+            if (c.getName().contains("2")) {
                 button3 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("4")) {
+            if (c.getName().contains("3")) {
                 button4 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("5")) {
+            if (c.getName().contains("4")) {
                 button5 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("6")) {
+            if (c.getName().contains("5")) {
                 button6 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("7")) {
+            if (c.getName().contains("6")) {
                 button7 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("8")) {
+            if (c.getName().contains("7")) {
                 button8 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("9")) {
+            if (c.getName().contains("8")) {
                 button9 = c.getPollData() == 1f;
             }
-            if (c.getName().contains("0")) {
+            if (c.getName().contains("9")) {
                 button10 = c.getPollData() == 1f;
             }
-
         }
         if (button1) {
             System.out.println("kick 1");
@@ -157,8 +151,10 @@ public class ActionUtil {
             System.out.println("kick 9");
         }
         if (button10) {
-            System.out.println("kick 0");
+            System.out.println("kick 10");
         }
+
+
     }
 
 }

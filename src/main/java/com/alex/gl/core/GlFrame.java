@@ -2,6 +2,7 @@ package com.alex.gl.core;
 
 import com.alex.gl.core.action.ActionUtil;
 import com.alex.gl.core.action.SecondsTimer;
+import com.alex.gl.core.action.ShapeUtils;
 import com.alex.gl.entity.Rect;
 import com.alex.gl.entity.Score;
 import com.alex.gl.entity.Settings;
@@ -15,6 +16,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.util.ResourceLoader;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +38,7 @@ public class GlFrame {
 
     private TrueTypeFont trueFont1;
     private TrueTypeFont trueFont2;
+    private TrueTypeFont trueFont3;
     private int halfWidth;
     private int topBorderOffset;
     private Score score = new Score();
@@ -69,7 +72,9 @@ public class GlFrame {
             Display.setVSyncEnabled(true);
             Display.create();
         } catch (LWJGLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
             e.printStackTrace();
+            System.exit(0);
         }
     }
 
@@ -91,14 +96,15 @@ public class GlFrame {
         gluOrtho2D(0, Display.getWidth(), Display.getHeight(), 0);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        glLineWidth(3f);
     }
 
     private void initFont() {
         try {
             InputStream inputStream	= ResourceLoader.getResourceAsStream("ADLER.TTF");
             Font font2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-            font2 = font2.deriveFont(72f);
-            trueFont2 = new TrueTypeFont(font2, true);
+            trueFont2 = new TrueTypeFont(font2.deriveFont(72f), true);
+            trueFont3 = new TrueTypeFont(font2.deriveFont(50f), true);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -145,6 +151,7 @@ public class GlFrame {
         glColor3f(1, 1, 0);
         glRecti(timeRect.x, timeRect.y, timeRect.x2, timeRect.y2);
         glColor3d(0, 0, 0);
+        ShapeUtils.drawJoystickQuads(Display.getWidth(), Display.getHeight(), halfWidth);
         stringShow();
         glFlush();
     }
@@ -171,11 +178,14 @@ public class GlFrame {
 
     private void timeDraw() {
         trueFont2.drawString(timePoint.x, timePoint.y, ActionUtil.convertTime(timer.getSeconds()), Color.red);
+        trueFont3.drawString(20, 20, "Round: ", Color.yellow);
     }
 
     private void keyDetector() {
         ActionUtil.controlDetect(score, timer);
-        ActionUtil.joyDetect(joystick);
+        if (joystick != null) {
+            ActionUtil.joyDetect(joystick);
+        }
     }
 
     private void attachFullScreenMode(DisplayMode current) {
@@ -185,7 +195,7 @@ public class GlFrame {
             for (DisplayMode mode : modes) {
                 if ((mode.getWidth() == current.getWidth()) && (mode.getHeight() == current.getHeight())) {
                     int maxBPP = 24;
-                    if (SystemUtils.OS_NAME.contains("Window")) {
+                    if (SystemUtils.OS_NAME.contains("Windows")) {
                         maxBPP = 32;
                     }
                     if (mode.getBitsPerPixel() == maxBPP) {
