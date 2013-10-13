@@ -4,7 +4,9 @@ import com.alex.gl.entity.Score;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
 
 import java.util.logging.Logger;
 
@@ -36,6 +38,14 @@ public class ActionUtil {
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_R) {
                     score.reset();
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_F) {
+                    try {
+                        Display.setFullscreen(!Display.isFullscreen());
+                    } catch (LWJGLException e) {
+                        e.printStackTrace();
+                        System.exit(0);
+                    }
                 }
                 timeSwitcher(timer);
             }
@@ -74,6 +84,10 @@ public class ActionUtil {
 
         if (joystick == null) {
             System.err.println("No joystick was found.");
+        } else {
+            for (Component component : joystick.getComponents()) {
+                System.out.println(component.getName());
+            }
         }
 
         return joystick;
@@ -153,8 +167,6 @@ public class ActionUtil {
         if (button10) {
             System.out.println("kick 10");
         }
-
-
     }
 
 }

@@ -1,7 +1,9 @@
 package com.alex.gl.core;
 
+import com.alex.gl.core.widget.GraphicsWidget;
 import com.alex.gl.core.widget.SetupWidget;
 import com.alex.gl.core.widget.helper.FileUtils;
+import com.alex.gl.entity.SettingContainer;
 import com.alex.gl.entity.Settings;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -29,6 +31,7 @@ public class MainFrame extends JFrame {
     private GlFrame glFrame;
     private JButton startButton;
     private Settings settings;
+    private SettingContainer container = new SettingContainer();
 
     public MainFrame() {
         settings = loadSettings();
@@ -80,7 +83,14 @@ public class MainFrame extends JFrame {
             }
         });
         addComponent(jMenuSettings, menuItem);
-
+        menuItem = new JMenuItem("Graphics");
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GraphicsWidget(self, container);
+            }
+        });
+        addComponent(jMenuSettings, menuItem);
         addComponent(menuBar, jMenu);
         addComponent(menuBar, jMenuSettings);
         setJMenuBar(menuBar);
@@ -91,10 +101,9 @@ public class MainFrame extends JFrame {
     }
 
     private void initActions() {
-//        final JFrame self = this;
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                glFrame = new GlFrame(settings);
+                glFrame = new GlFrame(settings, container);
                 glFrame.start();
             }
         });

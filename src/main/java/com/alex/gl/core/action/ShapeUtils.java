@@ -10,6 +10,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ShapeUtils {
 
+    public static final int QUAD_WIDTH = 30;
+
     public static void drawEmptyQuad(int x, int y, int width, int height, boolean fill) {
         int mode = (fill) ? GL_QUADS : GL_LINE_LOOP;
         glBegin(mode);
@@ -22,18 +24,18 @@ public class ShapeUtils {
     }
 
     public static void drawJoystickQuads(int width, int height, int halfWidth) {
-        int y = (int)(height * 0.3);
-        int y2 = y + 50;
-        int y3 = y2 + 50;
-        int y4 = y3 + 50;
+        int y = (int) (height * 0.3);
+        int y2 = y + QUAD_WIDTH;
+        int y3 = y2 + QUAD_WIDTH;
+        int y4 = y3 + QUAD_WIDTH;
 
-        drawEmptyQuad(halfWidth - 50, y, 50, 50, false);
-        drawEmptyQuad(halfWidth - 50, y2, 50, 50, false);
-        drawEmptyQuad(halfWidth - 50, y3, 50, 50, false);
-        drawEmptyQuad(halfWidth - 50, y4, 50, 50, false);
-        drawEmptyQuad(halfWidth, y, 50, 50, false);
-        drawEmptyQuad(halfWidth, y2, 50, 50, false);
-        drawEmptyQuad(halfWidth, y3, 50, 50, false);
-        drawEmptyQuad(halfWidth, y4, 50, 50, false);
+        drawEmptyQuad(width - QUAD_WIDTH, y, QUAD_WIDTH, QUAD_WIDTH, false);
+        drawEmptyQuad(width - QUAD_WIDTH, y2, QUAD_WIDTH, QUAD_WIDTH, false);
+        drawEmptyQuad(width - QUAD_WIDTH, y3, QUAD_WIDTH, QUAD_WIDTH, false);
+        drawEmptyQuad(width - QUAD_WIDTH, y4, QUAD_WIDTH, QUAD_WIDTH, false);
+        drawEmptyQuad(0, y, QUAD_WIDTH, QUAD_WIDTH, false);
+        drawEmptyQuad(0, y2, QUAD_WIDTH, QUAD_WIDTH, false);
+        drawEmptyQuad(0, y3, QUAD_WIDTH, QUAD_WIDTH, false);
+        drawEmptyQuad(0, y4, QUAD_WIDTH, QUAD_WIDTH, false);
     }
 }

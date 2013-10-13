@@ -1,10 +1,12 @@
 package com.alex.gl.core;
 
 import com.alex.gl.core.action.ActionUtil;
+import com.alex.gl.core.action.GLUtil;
 import com.alex.gl.core.action.SecondsTimer;
 import com.alex.gl.core.action.ShapeUtils;
 import com.alex.gl.entity.Rect;
 import com.alex.gl.entity.Score;
+import com.alex.gl.entity.SettingContainer;
 import com.alex.gl.entity.Settings;
 import net.java.games.input.Controller;
 import org.apache.commons.lang.SystemUtils;
@@ -18,8 +20,6 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.InputStream;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -33,7 +33,7 @@ import static org.lwjgl.util.glu.GLU.gluOrtho2D;
  */
 public class GlFrame {
 
-    private static final int WIDTH = 1280;
+    private static final int WIDTH = 1024;
     private static final int HEIGHT = 600;
 
     private TrueTypeFont trueFont1;
@@ -41,17 +41,20 @@ public class GlFrame {
     private TrueTypeFont trueFont3;
     private int halfWidth;
     private int topBorderOffset;
-    private Score score = new Score();
+    private Score score;
     private Rect timeRect;
     private Rect redRect;
     private Rect blueRect;
     private Point timePoint;
     private SecondsTimer timer;
     private Settings settings;
+    private SettingContainer container;
     private Controller joystick = ActionUtil.initJoystick();
 
-    public GlFrame(Settings settings) {
+    public GlFrame(Settings settings, SettingContainer container) {
         this.settings = settings;
+        this.container = container;
+        score = new Score(settings);
     }
 
     public void start() {
@@ -65,11 +68,16 @@ public class GlFrame {
 
     private void hardInit() {
         try {
-            DisplayMode displayMode = new DisplayMode(WIDTH, HEIGHT);
-//            attachFullScreenMode(displayMode);
+            DisplayMode displayMode = null;
+            if (container.getDisplayMode() != null) {
+                displayMode = container.getDisplayMode();
+            } else {
+                displayMode = new DisplayMode(WIDTH, HEIGHT);
+            }
             Display.setDisplayMode(displayMode);
             Display.setTitle("Vovinam Viet Vo Dao");
             Display.setVSyncEnabled(true);
+            Display.setFullscreen(true);
             Display.create();
         } catch (LWJGLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -80,31 +88,15 @@ public class GlFrame {
 
     private void displayInit() {
         halfWidth = Display.getWidth() / 2;
-        glDisable(GL_TEXTURE_2D);
-        glShadeModel(GL_SMOOTH);
-        glDisable(GL_LIGHTING);
-        glDisable(GL_DEPTH_TEST);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        glClearColor(0, 0, 0, 1);
-        glClearDepth(1);
-
-        glMatrixMode(GL_MODELVIEW);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glViewport(0, 0, Display.getWidth(), Display.getHeight());
-        gluOrtho2D(0, Display.getWidth(), Display.getHeight(), 0);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glLineWidth(3f);
+        GLUtil.glIniter();
     }
 
     private void initFont() {
         try {
-            InputStream inputStream	= ResourceLoader.getResourceAsStream("ADLER.TTF");
+            InputStream inputStream = ResourceLoader.getResourceAsStream("ADLER.TTF");
             Font font2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             trueFont2 = new TrueTypeFont(font2.deriveFont(72f), true);
-            trueFont3 = new TrueTypeFont(font2.deriveFont(50f), true);
+            trueFont3 = new TrueTypeFont(font2.deriveFont(40f), true);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -115,8 +107,8 @@ public class GlFrame {
 
     private void initInterface() {
         int topBorder = (int) (Display.getHeight() * 0.15);
-        int bottomBorder = (int)(Display.getHeight() * 0.85);
-        topBorderOffset = (int)(Display.getHeight() * 0.01);
+        int bottomBorder = (int) (Display.getHeight() * 0.85);
+        topBorderOffset = (int) (Display.getHeight() * 0.04);
         timeRect = new Rect(halfWidth - 200, 0, halfWidth + 200, topBorder);
         redRect = new Rect(0, topBorder, halfWidth, bottomBorder);
         blueRect = new Rect(halfWidth, topBorder, Display.getWidth(), bottomBorder);
@@ -124,7 +116,7 @@ public class GlFrame {
     }
 
     private void initTimer(int startSeconds) {
-        timer = new SecondsTimer(1000, startSeconds);
+        timer = new SecondsTimer(1000, startSeconds, score);
     }
 
     private void startMainLoop() {
@@ -160,7 +152,7 @@ public class GlFrame {
         glEnable(GL_BLEND);
         timeDraw();
         glPushMatrix();
-        glScaled(5, 6, 0);
+        glScaled(4, 5, 0);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         scoreDraw();
@@ -170,46 +162,22 @@ public class GlFrame {
     }
 
     private void scoreDraw() {
-        trueFont1.drawString(halfWidth * (0.05f - score.getRedDelta()), topBorderOffset,
+        trueFont1.drawString(halfWidth * (0.08f - score.getRedDelta()), topBorderOffset,
                 String.valueOf(score.getcRed()), Color.white);
-        trueFont1.drawString(Display.getWidth() * (0.14f - score.getBlueDelta()), topBorderOffset,
+        trueFont1.drawString(Display.getWidth() * (0.17f - score.getBlueDelta()), topBorderOffset,
                 String.valueOf(score.getcBlue()), Color.white);
     }
 
     private void timeDraw() {
         trueFont2.drawString(timePoint.x, timePoint.y, ActionUtil.convertTime(timer.getSeconds()), Color.red);
         trueFont3.drawString(20, 20, "Round: ", Color.yellow);
+        trueFont3.drawString(timeRect.x * 0.7f, 20, String.valueOf(score.getRound()), Color.yellow);
     }
 
     private void keyDetector() {
         ActionUtil.controlDetect(score, timer);
         if (joystick != null) {
             ActionUtil.joyDetect(joystick);
-        }
-    }
-
-    private void attachFullScreenMode(DisplayMode current) {
-        DisplayMode targetMode = null;
-        try {
-            DisplayMode[] modes = Display.getAvailableDisplayModes();
-            for (DisplayMode mode : modes) {
-                if ((mode.getWidth() == current.getWidth()) && (mode.getHeight() == current.getHeight())) {
-                    int maxBPP = 24;
-                    if (SystemUtils.OS_NAME.contains("Windows")) {
-                        maxBPP = 32;
-                    }
-                    if (mode.getBitsPerPixel() == maxBPP) {
-                        targetMode = mode;
-                        break;
-                    }
-                }
-            }
-            if (targetMode != null) {
-                Display.setDisplayMode(targetMode);
-                Display.setFullscreen(true);
-            }
-        } catch (LWJGLException e) {
-            e.printStackTrace();
         }
     }
 }
