@@ -33,6 +33,8 @@ applicationDistribution.from("$buildDir/natives/") {
     into "natives"
 }
 
+applicationDistribution.setExcludes(['*natives-*.jar'])
+
 natives.platforms.each { platform ->
     natives.dependsOn "${platform}Natives"
     task "${platform}Natives" {
