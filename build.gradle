@@ -15,8 +15,6 @@ dependencies {
     compile files('./src/main/resources/lib/slick-util.jar')	
 }
 
-build.dependsOn.add(distZip)
-
 startScripts {
     doLast {
         unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-Djava.library.path=../natives"')
@@ -54,4 +52,5 @@ natives.platforms.each { platform ->
     }
 }
 
+build.dependsOn.add(distZip)
 distZip.dependsOn.add(natives)
