@@ -1,0 +1,55 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'com.alex.gl.AppMain'
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile 'org.lwjgl.lwjgl:lwjgl:2.9.0'
+    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.0'	
+    compile 'commons-collections:commons-collections:3.0'	
+    compile 'org.apache.commons:commons-lang3:3.1'	
+    compile 'commons-lang:commons-lang:1.0'
+    compile files('./src/main/resources/lib/slick-util.jar')	
+}
+
+build.dependsOn.add(distZip)
+
+startScripts {
+    doLast {
+        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-Djava.library.path=../natives"')
+        windowsScript.text = windowsScript.text.replace('DEFAULT_JVM_OPTS=', 'DEFAULT_JVM_OPTS="-Djava.library.path=../natives"')
+    }
+}
+
+task natives {
+    ext.platforms = ['windows', 'linux', 'osx']
+    description "Copies native libraries to an appropriate directory."
+}
+
+applicationDistribution.from("$buildDir/natives/") {
+    into "natives"
+}
+
+natives.platforms.each { platform ->
+    natives.dependsOn "${platform}Natives"
+    task "${platform}Natives" {
+        ext.outputDir = "$buildDir/natives/"
+        inputs.files(configurations.compile)
+        outputs.dir(ext.outputDir)
+        doLast {
+            copy {
+                def artifacts = configurations.compile.resolvedConfiguration.resolvedArtifacts
+                    .findAll { it.classifier == "natives-$platform" }
+                artifacts.each { 
+                    from zipTree(it.file)
+                }            
+                into ext.outputDir
+            }
+        }
+    }
+}
+
+distZip.dependsOn.add(natives)
