@@ -1,5 +1,26 @@
 package com.alex.gl.core;
 
+import static org.lwjgl.opengl.GL11.GL_ALL_ATTRIB_BITS;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glColor3d;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glFlush;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushAttrib;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRecti;
+import static org.lwjgl.opengl.GL11.glScaled;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
+
 import com.alex.gl.core.action.ActionUtil;
 import com.alex.gl.core.action.GLUtil;
 import com.alex.gl.core.action.SecondsTimer;
@@ -8,22 +29,23 @@ import com.alex.gl.entity.Rect;
 import com.alex.gl.entity.Score;
 import com.alex.gl.entity.SettingContainer;
 import com.alex.gl.entity.Settings;
+
 import net.java.games.input.Controller;
-import org.apache.commons.lang.SystemUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.util.ResourceLoader;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.InputStream;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.gluOrtho2D;
+import javax.swing.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,7 +58,7 @@ public class GlFrame {
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 600;
 
-    private TrueTypeFont trueFont1;
+    private UnicodeFont trueFont1;
     private TrueTypeFont trueFont2;
     private TrueTypeFont trueFont3;
     private int halfWidth;
@@ -75,6 +97,7 @@ public class GlFrame {
                 displayMode = new DisplayMode(WIDTH, HEIGHT);
             }
             Display.setDisplayMode(displayMode);
+            Display.setResizable(true);
             Display.setTitle("Vovinam Viet Vo Dao");
             Display.setVSyncEnabled(true);
             Display.setFullscreen(true);
@@ -101,18 +124,26 @@ public class GlFrame {
             e.printStackTrace();
             System.exit(0);
         }
-        Font font = new Font("Arial", Font.BOLD, 72);
-        trueFont1 = new TrueTypeFont(font, true);
+        Font font = new Font("Arial", Font.BOLD, 350);
+        trueFont1 = new UnicodeFont(font);
+        try {
+            trueFont1.addAsciiGlyphs();
+            trueFont1.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
+            trueFont1.addNeheGlyphs();
+            trueFont1.loadGlyphs();
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initInterface() {
         int topBorder = (int) (Display.getHeight() * 0.15);
         int bottomBorder = (int) (Display.getHeight() * 0.85);
-        topBorderOffset = (int) (Display.getHeight() * 0.04);
         timeRect = new Rect(halfWidth - 200, 0, halfWidth + 200, topBorder);
         redRect = new Rect(0, topBorder, halfWidth, bottomBorder);
         blueRect = new Rect(halfWidth, topBorder, Display.getWidth(), bottomBorder);
         timePoint = new Point(timeRect.x + 90, timeRect.y + 15);
+        topBorderOffset = (int) (timeRect.y * 1.04f);
     }
 
     private void initTimer(int startSeconds) {
@@ -121,6 +152,10 @@ public class GlFrame {
 
     private void startMainLoop() {
         while (!Display.isCloseRequested() && !Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+            if (Display.wasResized()) {
+                displayInit();
+                initInterface();
+            }
             keyDetector();
             display();
             Display.update();
@@ -152,20 +187,20 @@ public class GlFrame {
         glEnable(GL_BLEND);
         timeDraw();
         glPushMatrix();
-        glScaled(4, 5, 0);
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glScaled(2, 2, 0);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         scoreDraw();
+        glPopAttrib();
         glPopMatrix();
         glDisable(GL_BLEND);
-        glPopAttrib();
     }
 
     private void scoreDraw() {
-        trueFont1.drawString(halfWidth * (0.08f - score.getRedDelta()), topBorderOffset,
-                String.valueOf(score.getcRed()), Color.white);
-        trueFont1.drawString(Display.getWidth() * (0.17f - score.getBlueDelta()), topBorderOffset,
-                String.valueOf(score.getcBlue()), Color.white);
+        trueFont1.drawString(redRect.x, redRect.y, String.valueOf(score.getcRed()));
+//        trueFont1.drawStrin g(Display.getWidth() * (0.17f - score.getBlueDelta()), topBorderOffset,
+//                String.valueOf(score.getcBlue()));
     }
 
     private void timeDraw() {

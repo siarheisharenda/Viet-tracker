@@ -12,7 +12,7 @@ dependencies {
     compile 'commons-collections:commons-collections:3.0'	
     compile 'org.apache.commons:commons-lang3:3.1'	
     compile 'commons-lang:commons-lang:1.0'
-    compile files('./src/main/resources/lib/slick-util.jar')	
+    compile files('./src/main/resources/lib/slick.jar')	
 }
 
 startScripts {
