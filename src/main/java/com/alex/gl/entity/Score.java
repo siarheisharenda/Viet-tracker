@@ -8,8 +8,8 @@ package com.alex.gl.entity;
  */
 public class Score {
 
-    private final float POSITIVE_DELTA = 0.02f;
-    private final float NEGATIVE_DELTA = 0.05f;
+    private final float POSITIVE_DELTA = 0.3f;
+    private final float NEGATIVE_DELTA = 0.6f;
 
     private int cRed;
     private int cBlue;
@@ -43,7 +43,7 @@ public class Score {
             return;
         }
         this.cBlue = cBlue;
-        blueDelta = (cBlue > 9) ? POSITIVE_DELTA : (cBlue < -0) ? NEGATIVE_DELTA - 0.01f : 0f;
+        blueDelta = (cBlue > 9) ? POSITIVE_DELTA : (cBlue < -0) ? NEGATIVE_DELTA: 0f;
     }
 
     public float getRedDelta() {

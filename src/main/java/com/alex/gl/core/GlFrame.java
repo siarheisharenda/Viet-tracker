@@ -18,7 +18,6 @@ import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushAttrib;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glRecti;
-import static org.lwjgl.opengl.GL11.glScaled;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
 
 import com.alex.gl.core.action.ActionUtil;
@@ -57,11 +56,11 @@ public class GlFrame {
 
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 600;
-
     private UnicodeFont trueFont1;
     private TrueTypeFont trueFont2;
     private TrueTypeFont trueFont3;
     private int halfWidth;
+    private int rightBorderOffset;
     private int topBorderOffset;
     private Score score;
     private Rect timeRect;
@@ -72,6 +71,7 @@ public class GlFrame {
     private Settings settings;
     private SettingContainer container;
     private Controller joystick = ActionUtil.initJoystick();
+    private int timeXPoint;
 
     public GlFrame(Settings settings, SettingContainer container) {
         this.settings = settings;
@@ -124,7 +124,7 @@ public class GlFrame {
             e.printStackTrace();
             System.exit(0);
         }
-        Font font = new Font("Arial", Font.BOLD, 350);
+        Font font = new Font("Arial", Font.BOLD, 250);
         trueFont1 = new UnicodeFont(font);
         try {
             trueFont1.addAsciiGlyphs();
@@ -143,7 +143,9 @@ public class GlFrame {
         redRect = new Rect(0, topBorder, halfWidth, bottomBorder);
         blueRect = new Rect(halfWidth, topBorder, Display.getWidth(), bottomBorder);
         timePoint = new Point(timeRect.x + 90, timeRect.y + 15);
-        topBorderOffset = (int) (timeRect.y * 1.04f);
+        rightBorderOffset = (int) (redRect.getWidth() * 0.35);
+        topBorderOffset = redRect.y + (int) (redRect.getHeight() * 0.2);
+        timeXPoint = timeRect.x + (int)(timeRect.getWidth() * 0.25);
     }
 
     private void initTimer(int startSeconds) {
@@ -188,7 +190,6 @@ public class GlFrame {
         timeDraw();
         glPushMatrix();
         glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glScaled(2, 2, 0);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         scoreDraw();
@@ -198,13 +199,14 @@ public class GlFrame {
     }
 
     private void scoreDraw() {
-        trueFont1.drawString(redRect.x, redRect.y, String.valueOf(score.getcRed()));
-//        trueFont1.drawStrin g(Display.getWidth() * (0.17f - score.getBlueDelta()), topBorderOffset,
-//                String.valueOf(score.getcBlue()));
+        trueFont1.drawString(rightBorderOffset - (rightBorderOffset * score.getRedDelta()), topBorderOffset,
+                String.valueOf(score.getcRed()));
+        trueFont1.drawString(blueRect.x + rightBorderOffset - (rightBorderOffset * score.getBlueDelta()),
+                topBorderOffset, String.valueOf(score.getcBlue()));
     }
 
     private void timeDraw() {
-        trueFont2.drawString(timePoint.x, timePoint.y, ActionUtil.convertTime(timer.getSeconds()), Color.red);
+        trueFont2.drawString(timeXPoint, timePoint.y, ActionUtil.convertTime(timer.getSeconds()), Color.red);
         trueFont3.drawString(20, 20, "Round: ", Color.yellow);
         trueFont3.drawString(timeRect.x * 0.7f, 20, String.valueOf(score.getRound()), Color.yellow);
     }
