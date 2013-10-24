@@ -23,7 +23,7 @@ public class SecondsTimer implements Runnable {
         this.seconds = seconds;
         this.startSeconds = seconds;
         this.score = score;
-        status = RoundStatus.START_OF_MATCH;
+        status = RoundStatus.READY;
     }
 
     public int getSeconds() {
@@ -38,11 +38,20 @@ public class SecondsTimer implements Runnable {
         seconds = startSeconds;
     }
 
-    public void start() {
+    private void start() {
         thread = new Thread(this);
         thread.start();
-        status = RoundStatus.BEGIN;
         run = true;
+    }
+
+    public void startFight() {
+        start();
+        status = RoundStatus.FIGHT;
+    }
+
+    public void startBreak() {
+        start();
+        status = RoundStatus.BREAK;
     }
 
     public boolean isRun() {
@@ -55,23 +64,42 @@ public class SecondsTimer implements Runnable {
 
     public void run() {
         try {
-            while (seconds > 0) {
-                Thread.sleep(delay);
-                substractSeconds();
-            }
-//            score.setRound(score.getRound() + 1);
-//            reset();
-            if (score.getRound() + 1 != score.getSettings().getRoundsInMatch()) {
-                status = RoundStatus.NEXT_ROUND;
+            if (RoundStatus.BREAK.equals(status)) {
+                count();
+                status = RoundStatus.READY;
             } else {
-                status = RoundStatus.FINISH;
+                count();
+                if (score.getRound() + 1 > score.getSettings().getRoundsInMatch()) {
+                    status = RoundStatus.FINISH;
+                } else {
+                    status = RoundStatus.NEXT_ROUND;
+                }
             }
         } catch (InterruptedException ex) {
         }
         run = false;
     }
 
+    private void count() throws InterruptedException {
+        while (seconds > 0) {
+            Thread.sleep(delay);
+            substractSeconds();
+        }
+    }
+
     public static enum RoundStatus {
-        START_OF_MATCH, BEGIN, NEXT_ROUND, FINISH;
+        READY, FIGHT, NEXT_ROUND, FINISH, BREAK, BREAK_END;
+    }
+
+    public RoundStatus getStatus() {
+        return status;
+    }
+
+    public void breakRound() {
+        status = RoundStatus.BREAK;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
     }
 }

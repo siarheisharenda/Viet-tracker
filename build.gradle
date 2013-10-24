@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'idea'
 
 mainClassName = 'com.alex.gl.AppMain'
 
@@ -36,9 +37,9 @@ applicationDistribution.setExcludes(['*natives-*.jar'])
 natives.platforms.each { platform ->
     natives.dependsOn "${platform}Natives"
     task "${platform}Natives" {
-        ext.outputDir = "$buildDir/natives/"
+        outDir = "$buildDir/natives/"
         inputs.files(configurations.compile)
-        outputs.dir(ext.outputDir)
+        outputs.dir(outDir)
         doLast {
             copy {
                 def artifacts = configurations.compile.resolvedConfiguration.resolvedArtifacts
@@ -46,7 +47,7 @@ natives.platforms.each { platform ->
                 artifacts.each { 
                     from zipTree(it.file)
                 }            
-                into ext.outputDir
+                into outDir
             }
         }
     }

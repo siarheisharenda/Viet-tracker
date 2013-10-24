@@ -83,6 +83,7 @@ public class GlFrame {
         hardInit();
         displayInit();
         initFont();
+        initScoreFont();
         initInterface();
         initTimer(settings.getSecondsInRound());
         startMainLoop();
@@ -119,12 +120,17 @@ public class GlFrame {
             InputStream inputStream = ResourceLoader.getResourceAsStream("ADLER.TTF");
             Font font2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             trueFont2 = new TrueTypeFont(font2.deriveFont(72f), true);
-            trueFont3 = new TrueTypeFont(font2.deriveFont(40f), true);
+            trueFont3 = new TrueTypeFont(font2.deriveFont(45f), true);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
-        Font font = new Font("Arial", Font.BOLD, 250);
+    }
+
+    private void initScoreFont() {
+        int fontInc = (Display.getWidth() - 1024) / 10;
+        int size = 250 + fontInc;
+        Font font = new Font("Arial", Font.BOLD, (size > 350) ? 350 : size);
         trueFont1 = new UnicodeFont(font);
         try {
             trueFont1.addAsciiGlyphs();
@@ -145,7 +151,7 @@ public class GlFrame {
         timePoint = new Point(timeRect.x + 90, timeRect.y + 15);
         rightBorderOffset = (int) (redRect.getWidth() * 0.35);
         topBorderOffset = redRect.y + (int) (redRect.getHeight() * 0.2);
-        timeXPoint = timeRect.x + (int)(timeRect.getWidth() * 0.25);
+        timeXPoint = timeRect.x + (int) (timeRect.getWidth() * 0.25);
     }
 
     private void initTimer(int startSeconds) {
@@ -156,8 +162,10 @@ public class GlFrame {
         while (!Display.isCloseRequested() && !Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
             if (Display.wasResized()) {
                 displayInit();
+                initScoreFont();
                 initInterface();
             }
+            ActionUtil.roundControl(timer, score);
             keyDetector();
             display();
             Display.update();
@@ -209,6 +217,7 @@ public class GlFrame {
         trueFont2.drawString(timeXPoint, timePoint.y, ActionUtil.convertTime(timer.getSeconds()), Color.red);
         trueFont3.drawString(20, 20, "Round: ", Color.yellow);
         trueFont3.drawString(timeRect.x * 0.7f, 20, String.valueOf(score.getRound()), Color.yellow);
+        trueFont3.drawString(timeRect.x2 * 1.1f, 20, String.valueOf(timer.getStatus()), Color.cyan);
     }
 
     private void keyDetector() {

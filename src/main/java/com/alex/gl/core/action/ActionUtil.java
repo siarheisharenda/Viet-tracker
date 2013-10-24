@@ -8,6 +8,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
+import javax.swing.*;
 import java.util.logging.Logger;
 
 /**
@@ -57,7 +58,7 @@ public class ActionUtil {
             if (timer.isRun()) {
                 timer.stop();
             } else {
-                timer.start();
+                timer.startFight();
             }
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_T) {
@@ -73,6 +74,18 @@ public class ActionUtil {
         return String.format("%d : %s", minutes, stringSecond);
     }
 
+    public static void roundControl(SecondsTimer timer, Score score) {
+        if (SecondsTimer.RoundStatus.NEXT_ROUND.equals(timer.getStatus())) {
+            score.setRound(score.getRound() + 1);
+            timer.setSeconds(score.getSettings().getSecondBetweenRounds());
+            timer.breakRound();
+            timer.startBreak();
+        }
+        if (SecondsTimer.RoundStatus.READY.equals(timer.getStatus())) {
+            timer.reset();
+        }
+    }
+
     public static Controller initJoystick() {
         Controller joystick = null;
         for (Controller c : ControllerEnvironment.getDefaultEnvironment().getControllers()) {
@@ -86,7 +99,7 @@ public class ActionUtil {
             System.err.println("No joystick was found.");
         } else {
             for (Component component : joystick.getComponents()) {
-                System.out.println(component.getName());
+                System.out.println(component.getIdentifier());
             }
         }
 
@@ -95,77 +108,47 @@ public class ActionUtil {
 
     public static void joyDetect(Controller controller) {
         controller.poll();
-        boolean button1 = false;
-        boolean button2 = false;
-        boolean button3 = false;
-        boolean button4 = false;
-        boolean button5 = false;
-        boolean button6 = false;
-        boolean button7 = false;
-        boolean button8 = false;
-        boolean button9 = false;
-        boolean button10 = false;
-        for (Component c : controller.getComponents()) {
-            if (c.getName().contains("0")) {
-                button1 = c.getPollData() == 1f;
+        boolean b1 = false;
+        boolean b2 = false;
+        boolean b3 = false;
+        boolean b4 = false;
+        boolean b5 = false;
+        boolean b6 = false;
+        boolean b7 = false;
+        boolean b8 = false;
+        boolean b9 = false;
+        boolean b10 = false;
+        for (Component component : controller.getComponents()) {
+            if (component.getIdentifier().toString().equals("0")) {
+                b1 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("1")) {
-                button2 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("1")) {
+                b2 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("2")) {
-                button3 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("2")) {
+                b3 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("3")) {
-                button4 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("3")) {
+                b4 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("4")) {
-                button5 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("4")) {
+                b5 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("5")) {
-                button6 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("5")) {
+                b6 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("6")) {
-                button7 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("6")) {
+                b7 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("7")) {
-                button8 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("7")) {
+                b8 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("8")) {
-                button9 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("8")) {
+                b9 = component.getPollData() >= 1f;
             }
-            if (c.getName().contains("9")) {
-                button10 = c.getPollData() == 1f;
+            if (component.getIdentifier().toString().equals("9")) {
+                b10 = component.getPollData() >= 1f;
             }
-        }
-        if (button1) {
-            System.out.println("kick 1");
-        }
-        if (button2) {
-            System.out.println("kick 2");
-        }
-        if (button3) {
-            System.out.println("kick 3");
-        }
-        if (button4) {
-            System.out.println("kick 4");
-        }
-        if (button5) {
-            System.out.println("kick 5");
-        }
-        if (button6) {
-            System.out.println("kick 6");
-        }
-        if (button7) {
-            System.out.println("kick 7");
-        }
-        if (button8) {
-            System.out.println("kick 8");
-        }
-        if (button9) {
-            System.out.println("kick 9");
-        }
-        if (button10) {
-            System.out.println("kick 10");
         }
     }
 
