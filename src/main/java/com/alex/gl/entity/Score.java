@@ -26,7 +26,7 @@ public class Score {
         return cRed;
     }
 
-    public void setcRed(int cRed) {
+    public synchronized void setcRed(int cRed) {
         if (isAllow(cRed)) {
             return;
         }
@@ -38,7 +38,7 @@ public class Score {
         return cBlue;
     }
 
-    public void setcBlue(int cBlue) {
+    public synchronized void setcBlue(int cBlue) {
         if (isAllow(cBlue)) {
             return;
         }

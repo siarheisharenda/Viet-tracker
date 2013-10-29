@@ -16,6 +16,8 @@ public class Settings implements Serializable {
     private int secondsInRound = 30;
     private int secondBetweenRounds = 20;
     private int medicalBreakTime = 60;
+    private int judges = 4;
+    private float hitDelay = 1.5f;
 
     public int getRoundsInMatch() {
         return roundsInMatch;
@@ -47,5 +49,21 @@ public class Settings implements Serializable {
 
     public void setMedicalBreakTime(int medicalBreakTime) {
         this.medicalBreakTime = medicalBreakTime;
+    }
+
+    public int getJudges() {
+        return judges;
+    }
+
+    public void setJudges(int judges) {
+        this.judges = judges;
+    }
+
+    public float getHitDelay() {
+        return hitDelay;
+    }
+
+    public void setHitDelay(float hitDelay) {
+        this.hitDelay = hitDelay;
     }
 }

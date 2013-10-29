@@ -88,7 +88,7 @@ public class SecondsTimer implements Runnable {
     }
 
     public static enum RoundStatus {
-        READY, FIGHT, NEXT_ROUND, FINISH, BREAK, BREAK_END;
+        READY, FIGHT, NEXT_ROUND, FINISH, BREAK;
     }
 
     public RoundStatus getStatus() {

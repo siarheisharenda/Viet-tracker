@@ -1,5 +1,6 @@
 package com.alex.gl.core.action;
 
+import com.alex.gl.entity.DBoolean;
 import com.alex.gl.entity.Score;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
@@ -9,6 +10,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import javax.swing.*;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 /**
@@ -16,7 +18,6 @@ import java.util.logging.Logger;
  * User: Aisks
  * Date: 29.09.13
  * Time: 9:16
- * To change this template use File | Settings | File Templates.
  */
 public class ActionUtil {
 
@@ -98,58 +99,54 @@ public class ActionUtil {
         if (joystick == null) {
             System.err.println("No joystick was found.");
         } else {
+            int i = 0;
             for (Component component : joystick.getComponents()) {
-                System.out.println(component.getIdentifier());
+                if (component.getIdentifier().toString().equals("0")) {
+                    buttonOffset = i;
+                    break;
+                }
+                i++;
             }
+            buttonsEnd = buttonOffset + DBoolean.getJudges() * 2;
         }
 
         return joystick;
     }
 
+    static int buttonOffset;
+    static int buttonsEnd;
+    static DBoolean b1 = new DBoolean();
+    static DBoolean b2 = new DBoolean(true);
+    static DBoolean b3 = new DBoolean();
+    static DBoolean b4 = new DBoolean(true);
+    static DBoolean b5 = new DBoolean();
+    static DBoolean b6 = new DBoolean(true);
+    static DBoolean b7 = new DBoolean();
+    static DBoolean b8 = new DBoolean(true);
+    static DBoolean[] buttons = new DBoolean[]{b1, b2, b3, b4, b5, b6, b7, b8};
+
     public static void joyDetect(Controller controller) {
         controller.poll();
-        boolean b1 = false;
-        boolean b2 = false;
-        boolean b3 = false;
-        boolean b4 = false;
-        boolean b5 = false;
-        boolean b6 = false;
-        boolean b7 = false;
-        boolean b8 = false;
-        boolean b9 = false;
-        boolean b10 = false;
-        for (Component component : controller.getComponents()) {
-            if (component.getIdentifier().toString().equals("0")) {
-                b1 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("1")) {
-                b2 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("2")) {
-                b3 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("3")) {
-                b4 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("4")) {
-                b5 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("5")) {
-                b6 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("6")) {
-                b7 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("7")) {
-                b8 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("8")) {
-                b9 = component.getPollData() >= 1f;
-            }
-            if (component.getIdentifier().toString().equals("9")) {
-                b10 = component.getPollData() >= 1f;
+        Component[] components = controller.getComponents();
+        for (int i = buttonOffset; i < buttonsEnd; i++) {
+            if (components[i].getPollData() >= 1f) {
+                startButton(i - buttonOffset);
+            } else {
+                buttons[i - buttonOffset].release();
             }
         }
     }
 
+    private static void startButton(int indexButton) {
+        DBoolean button = buttons[indexButton];
+        DBoolean appositeButton = buttons[isEven(indexButton) ? indexButton + 1 : indexButton - 1];
+        if (!appositeButton.isHit() && !button.isRun() && button.isReleased()) {
+            button.hit();
+            new Thread(button).start();
+        }
+    }
+
+    private static boolean isEven(int value) {
+        return value % 2 == 0;
+    }
 }

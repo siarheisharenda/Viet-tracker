@@ -24,10 +24,7 @@ import com.alex.gl.core.action.ActionUtil;
 import com.alex.gl.core.action.GLUtil;
 import com.alex.gl.core.action.SecondsTimer;
 import com.alex.gl.core.action.ShapeUtils;
-import com.alex.gl.entity.Rect;
-import com.alex.gl.entity.Score;
-import com.alex.gl.entity.SettingContainer;
-import com.alex.gl.entity.Settings;
+import com.alex.gl.entity.*;
 
 import net.java.games.input.Controller;
 import org.lwjgl.LWJGLException;
@@ -70,7 +67,7 @@ public class GlFrame {
     private SecondsTimer timer;
     private Settings settings;
     private SettingContainer container;
-    private Controller joystick = ActionUtil.initJoystick();
+    private Controller joystick;
     private int timeXPoint;
 
     public GlFrame(Settings settings, SettingContainer container) {
@@ -86,7 +83,15 @@ public class GlFrame {
         initScoreFont();
         initInterface();
         initTimer(settings.getSecondsInRound());
+        initControl();
+
         startMainLoop();
+    }
+
+    private void initControl() {
+        DBoolean.setDelay(settings.getHitDelay());
+        DBoolean.setJudges(settings.getJudges());
+        joystick = ActionUtil.initJoystick();
     }
 
     private void hardInit() {
@@ -188,7 +193,7 @@ public class GlFrame {
         glColor3f(1, 1, 0);
         glRecti(timeRect.x, timeRect.y, timeRect.x2, timeRect.y2);
         glColor3d(0, 0, 0);
-        ShapeUtils.drawJoystickQuads(Display.getWidth(), Display.getHeight(), halfWidth);
+        ShapeUtils.drawJoystickQuads(Display.getWidth(), Display.getHeight(), score);
         stringShow();
         glFlush();
     }
