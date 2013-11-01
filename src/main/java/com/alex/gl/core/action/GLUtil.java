@@ -1,12 +1,12 @@
 package com.alex.gl.core.action;
 
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.gluOrtho2D;
+
 import org.apache.commons.lang.SystemUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.gluOrtho2D;
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,6 +58,17 @@ public class GLUtil {
             }
         } catch (LWJGLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void setTimerColor(SecondsTimer.RoundStatus status) {
+        switch (status) {
+            case BREAK:
+                glColor3ub((byte)0xAF,(byte)0xEE,(byte)0xEE);
+                break;
+            default:
+                glColor3f(1, 1, 0);
+                break;
         }
     }
 

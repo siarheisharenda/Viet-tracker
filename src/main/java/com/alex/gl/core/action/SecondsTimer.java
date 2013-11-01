@@ -36,6 +36,7 @@ public class SecondsTimer implements Runnable {
 
     public void reset() {
         seconds = startSeconds;
+        status = RoundStatus.READY;
     }
 
     private void start() {

@@ -1,29 +1,6 @@
 package com.alex.gl.core;
 
-import static org.lwjgl.opengl.GL11.GL_ALL_ATTRIB_BITS;
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_NEAREST;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glColor3d;
-import static org.lwjgl.opengl.GL11.glColor3f;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glFlush;
-import static org.lwjgl.opengl.GL11.glPopAttrib;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushAttrib;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glRecti;
-import static org.lwjgl.opengl.GL11.glTexParameteri;
-
-import com.alex.gl.core.action.ActionUtil;
-import com.alex.gl.core.action.GLUtil;
-import com.alex.gl.core.action.SecondsTimer;
-import com.alex.gl.core.action.ShapeUtils;
+import com.alex.gl.core.action.*;
 import com.alex.gl.entity.*;
 
 import net.java.games.input.Controller;
@@ -42,6 +19,8 @@ import java.awt.*;
 import java.io.InputStream;
 
 import javax.swing.*;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -187,15 +166,27 @@ public class GlFrame {
     private void display() {
         glClear(GL_COLOR_BUFFER_BIT);
         glColor3f(1, 0, 0);
-        glRecti(redRect.x, redRect.y, redRect.x2, redRect.y2);
+        drawRect(false);
         glColor3f(0, 0, 1);
-        glRecti(blueRect.x, blueRect.y, blueRect.x2, blueRect.y2);
-        glColor3f(1, 1, 0);
+        drawRect(true);
+        GLUtil.setTimerColor(timer.getStatus());
         glRecti(timeRect.x, timeRect.y, timeRect.x2, timeRect.y2);
         glColor3d(0, 0, 0);
         ShapeUtils.drawJoystickQuads(Display.getWidth(), Display.getHeight(), score);
+        if (WinnerSingleton.instance.isBlue() != null) {
+            glColor3ub((byte)0x4F, (byte)0xFF, (byte)0);
+            drawRect(WinnerSingleton.instance.isBlue());
+        }
         stringShow();
         glFlush();
+    }
+
+    private void drawRect(boolean isBlue) {
+        if (isBlue) {
+            glRecti(blueRect.x, blueRect.y, blueRect.x2, blueRect.y2);
+        } else {
+            glRecti(redRect.x, redRect.y, redRect.x2, redRect.y2);
+        }
     }
 
     private void stringShow() {

@@ -35,8 +35,6 @@ public class DBoolean implements Runnable {
         DBoolean.delay = delay;
     }
 
-
-
     public synchronized void hit() {
         this.hit = true;
         this.released = false;

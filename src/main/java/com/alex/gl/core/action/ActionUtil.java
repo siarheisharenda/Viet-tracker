@@ -40,6 +40,15 @@ public class ActionUtil {
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_R) {
                     score.reset();
+                    WinnerSingleton.instance.reset();
+                    timer.reset();
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_W) {
+                    if (SecondsTimer.RoundStatus.FINISH.equals(timer.getStatus())) {
+                        if (score.getcBlue() != score.getcRed()) {
+                            WinnerSingleton.instance.setBlue(score.getcBlue() > score.getcRed());
+                        }
+                    }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_F) {
                     try {
@@ -55,7 +64,7 @@ public class ActionUtil {
     }
 
     public static void timeSwitcher(SecondsTimer timer) {
-        if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
+        if (!SecondsTimer.RoundStatus.BREAK.equals(timer.getStatus()) && Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
             if (timer.isRun()) {
                 timer.stop();
             } else {
