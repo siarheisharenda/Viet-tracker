@@ -69,6 +69,7 @@ public class ActionUtil {
                 timer.stop();
             } else {
                 timer.startFight();
+                OpenAlSounder.instance.play();
             }
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_T) {

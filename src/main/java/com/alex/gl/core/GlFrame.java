@@ -92,6 +92,7 @@ public class GlFrame {
             e.printStackTrace();
             System.exit(0);
         }
+        OpenAlSounder.instance.init();
     }
 
     private void displayInit() {
@@ -159,6 +160,7 @@ public class GlFrame {
     }
 
     private void close() {
+        OpenAlSounder.instance.destroyAl();
         Display.destroy();
         score.reset();
     }
