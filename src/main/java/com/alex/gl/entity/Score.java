@@ -17,6 +17,8 @@ public class Score {
     private float blueDelta;
     private int round = 1;
     private Settings settings;
+    private int pBlue;
+    private int pRed;
 
     public Score(Settings settings) {
         this.settings = settings;
@@ -44,6 +46,22 @@ public class Score {
         }
         this.cBlue = cBlue;
         blueDelta = (cBlue > 9) ? POSITIVE_DELTA : (cBlue < -0) ? NEGATIVE_DELTA: 0f;
+    }
+
+    public int getpBlue() {
+        return pBlue;
+    }
+
+    public void setpBlue(int pBlue) {
+        this.pBlue = pBlue;
+    }
+
+    public int getpRed() {
+        return pRed;
+    }
+
+    public void setpRed(int pRed) {
+        this.pRed = pRed;
     }
 
     public float getRedDelta() {

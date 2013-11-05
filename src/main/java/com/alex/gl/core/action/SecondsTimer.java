@@ -72,6 +72,7 @@ public class SecondsTimer implements Runnable {
                 count();
                 if (score.getRound() + 1 > score.getSettings().getRoundsInMatch()) {
                     status = RoundStatus.FINISH;
+                    OpenAlSounder.instance.play();
                 } else {
                     status = RoundStatus.NEXT_ROUND;
                 }

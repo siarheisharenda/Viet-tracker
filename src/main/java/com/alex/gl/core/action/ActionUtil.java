@@ -28,15 +28,27 @@ public class ActionUtil {
             if (Keyboard.getEventKeyState()) {
                 if (Keyboard.getEventKey() == Keyboard.KEY_A) {
                     score.setcRed(score.getcRed() + 1);
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+                        score.setpRed(score.getpRed() + 1);
+                    }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_Z) {
                     score.setcRed(score.getcRed() - 1);
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+                        score.setpRed(score.getpRed() - 1);
+                    }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_K) {
                     score.setcBlue(score.getcBlue() + 1);
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+                        score.setpBlue(score.getpBlue() + 1);
+                    }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_M) {
                     score.setcBlue(score.getcBlue() - 1);
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+                        score.setpBlue(score.getpBlue() + 1);
+                    }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_R) {
                     score.reset();

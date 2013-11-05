@@ -29,6 +29,8 @@ public class SetupWidget extends JDialog {
     private JTextField medicalBreakTime;
     private JComboBox<Integer> judgesBox;
     private JTextField hitDelayField;
+    private JTextField pointGapField;
+    private JTextField pointCapField;
 
     public SetupWidget(Frame owner, Settings settings) {
         super(owner, "Setup window");
@@ -52,7 +54,7 @@ public class SetupWidget extends JDialog {
     }
 
     private JPanel initSetupLayout() {
-        JPanel panel = new JPanel(new GridLayout(4, 2));
+        JPanel panel = new JPanel(new GridLayout(6, 2));
         panel.add(new JLabel("Rounds in match:"));
         roundsInMatchField = UIUtils.createField(2);
         panel.add(roundsInMatchField);
@@ -65,6 +67,12 @@ public class SetupWidget extends JDialog {
         panel.add(new JLabel("Medical break time:"));
         medicalBreakTime = UIUtils.createField(3);
         panel.add(medicalBreakTime);
+        panel.add(new JLabel("Point gap to win:"));
+        pointGapField = UIUtils.createField(2);
+        panel.add(pointGapField);
+        panel.add(new JLabel("Point cap to win:"));
+        pointCapField = UIUtils.createField(2);
+        panel.add(pointCapField);
         return panel;
     }
 
@@ -104,6 +112,8 @@ public class SetupWidget extends JDialog {
         settings.setSecondsInRound(NumberUtils.createInteger(secondsInRoundField.getText()));
         settings.setJudges(NumberUtils.createInteger(judgesBox.getSelectedItem().toString()));
         settings.setHitDelay(NumberUtils.createFloat(hitDelayField.getText()));
+        settings.setPointGap(NumberUtils.createInteger(pointGapField.getText()));
+        settings.setPointCap(NumberUtils.createInteger(pointCapField.getText()));
     }
 
     private void injectData() {
@@ -113,6 +123,8 @@ public class SetupWidget extends JDialog {
         medicalBreakTime.setText(String.valueOf(settings.getMedicalBreakTime()));
         judgesBox.setSelectedItem(settings.getJudges());
         hitDelayField.setText(String.valueOf(settings.getHitDelay()));
+        pointGapField.setText(String.valueOf(settings.getPointGap()));
+        pointCapField.setText(String.valueOf(settings.getPointCap()));
     }
 
 }

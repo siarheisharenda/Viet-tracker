@@ -48,6 +48,7 @@ public class GlFrame {
     private SettingContainer container;
     private Controller joystick;
     private int timeXPoint;
+    private TrueTypeFont trueFont4;
 
     public GlFrame(Settings settings, SettingContainer container) {
         this.settings = settings;
@@ -106,6 +107,7 @@ public class GlFrame {
             Font font2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             trueFont2 = new TrueTypeFont(font2.deriveFont(72f), true);
             trueFont3 = new TrueTypeFont(font2.deriveFont(45f), true);
+            trueFont4 = new TrueTypeFont(font2.deriveFont(25f), true);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -216,6 +218,7 @@ public class GlFrame {
         trueFont3.drawString(20, 20, "Round: ", Color.yellow);
         trueFont3.drawString(timeRect.x * 0.7f, 20, String.valueOf(score.getRound()), Color.yellow);
         trueFont3.drawString(timeRect.x2 * 1.1f, 20, String.valueOf(timer.getStatus()), Color.cyan);
+        trueFont4.drawString(10 , redRect.y2 + 20, "Penalty red: " + String.valueOf(score.getpRed()), Color.magenta);
     }
 
     private void keyDetector() {

@@ -19,6 +19,9 @@ public class Settings implements Serializable {
     private int judges = 4;
     private float hitDelay = 1.5f;
 
+    private int pointGap = 10;
+    private int pointCap = -5;
+
     public int getRoundsInMatch() {
         return roundsInMatch;
     }
@@ -65,5 +68,21 @@ public class Settings implements Serializable {
 
     public void setHitDelay(float hitDelay) {
         this.hitDelay = hitDelay;
+    }
+
+    public int getPointGap() {
+        return pointGap;
+    }
+
+    public void setPointGap(int pointGap) {
+        this.pointGap = pointGap;
+    }
+
+    public int getPointCap() {
+        return pointCap;
+    }
+
+    public void setPointCap(int pointCap) {
+        this.pointCap = pointCap;
     }
 }
