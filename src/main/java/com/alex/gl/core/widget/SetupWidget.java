@@ -106,14 +106,22 @@ public class SetupWidget extends JDialog {
     }
 
     private void apply() {
-        settings.setRoundsInMatch(NumberUtils.createInteger(roundsInMatchField.getText()));
-        settings.setMedicalBreakTime(NumberUtils.createInteger(medicalBreakTime.getText()));
-        settings.setSecondBetweenRounds(NumberUtils.createInteger(secondsBetweenRounds.getText()));
-        settings.setSecondsInRound(NumberUtils.createInteger(secondsInRoundField.getText()));
-        settings.setJudges(NumberUtils.createInteger(judgesBox.getSelectedItem().toString()));
-        settings.setHitDelay(NumberUtils.createFloat(hitDelayField.getText()));
-        settings.setPointGap(NumberUtils.createInteger(pointGapField.getText()));
-        settings.setPointCap(NumberUtils.createInteger(pointCapField.getText()));
+        int value = NumberUtils.createInteger(roundsInMatchField.getText());
+        settings.setRoundsInMatch((value > 0) ? value : 5);
+        value = NumberUtils.createInteger(medicalBreakTime.getText());
+        settings.setMedicalBreakTime((value > 0) ? value : 5);
+        value = NumberUtils.createInteger(secondsBetweenRounds.getText());
+        settings.setSecondBetweenRounds((value > 0) ? value : 5);
+        value = NumberUtils.createInteger(secondsInRoundField.getText());
+        settings.setSecondsInRound((value > 0) ? value : 5);
+        value = NumberUtils.createInteger(judgesBox.getSelectedItem().toString());
+        settings.setJudges((value > 0) ? value : 5);
+        float fvalue = NumberUtils.createFloat(hitDelayField.getText());
+        settings.setHitDelay((fvalue > 0) ? value : 5);
+        value = NumberUtils.createInteger(pointGapField.getText());
+        settings.setPointGap((value > 0) ? value : 5);
+        value = NumberUtils.createInteger(pointCapField.getText());
+        settings.setPointCap((value > 0) ? value : 5);
     }
 
     private void injectData() {

@@ -20,7 +20,7 @@ public class Settings implements Serializable {
     private float hitDelay = 1.5f;
 
     private int pointGap = 10;
-    private int pointCap = -5;
+    private int pointCap = 5;
 
     public int getRoundsInMatch() {
         return roundsInMatch;

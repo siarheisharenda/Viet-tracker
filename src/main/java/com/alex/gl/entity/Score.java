@@ -45,7 +45,7 @@ public class Score {
             return;
         }
         this.cBlue = cBlue;
-        blueDelta = (cBlue > 9) ? POSITIVE_DELTA : (cBlue < -0) ? NEGATIVE_DELTA: 0f;
+        blueDelta = (cBlue > 9) ? POSITIVE_DELTA : (cBlue < -0) ? NEGATIVE_DELTA : 0f;
     }
 
     public int getpBlue() {
@@ -53,7 +53,9 @@ public class Score {
     }
 
     public void setpBlue(int pBlue) {
-        this.pBlue = pBlue;
+        if (pBlue > -1) {
+            this.pBlue = pBlue;
+        }
     }
 
     public int getpRed() {
@@ -61,7 +63,9 @@ public class Score {
     }
 
     public void setpRed(int pRed) {
-        this.pRed = pRed;
+        if (pRed > -1) {
+            this.pRed = pRed;
+        }
     }
 
     public float getRedDelta() {
@@ -85,7 +89,7 @@ public class Score {
     }
 
     public void setRound(int round) {
-        if (round > settings.getRoundsInMatch() ) {
+        if (round > settings.getRoundsInMatch()) {
             return;
         }
         this.round = round;

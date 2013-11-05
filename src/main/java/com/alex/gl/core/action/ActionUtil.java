@@ -9,8 +9,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import javax.swing.*;
-import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 /**
@@ -29,22 +27,22 @@ public class ActionUtil {
                 if (Keyboard.getEventKey() == Keyboard.KEY_A) {
                     score.setcRed(score.getcRed() + 1);
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-                        score.setpRed(score.getpRed() + 1);
+                        score.setpRed(score.getpRed() - 1);
                     }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_Z) {
                     score.setcRed(score.getcRed() - 1);
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-                        score.setpRed(score.getpRed() - 1);
+                        score.setpRed(score.getpRed() + 1);
                     }
                 }
-                if (Keyboard.getEventKey() == Keyboard.KEY_K) {
+                if (Keyboard.getEventKey() == Keyboard.KEY_J) {
                     score.setcBlue(score.getcBlue() + 1);
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-                        score.setpBlue(score.getpBlue() + 1);
+                        score.setpBlue(score.getpBlue() - 1);
                     }
                 }
-                if (Keyboard.getEventKey() == Keyboard.KEY_M) {
+                if (Keyboard.getEventKey() == Keyboard.KEY_N) {
                     score.setcBlue(score.getcBlue() - 1);
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
                         score.setpBlue(score.getpBlue() + 1);
@@ -55,12 +53,21 @@ public class ActionUtil {
                     WinnerSingleton.instance.reset();
                     timer.reset();
                 }
+                if (Keyboard.getEventKey() == Keyboard.KEY_M) {
+                    if (!SecondsTimer.RoundStatus.MEDICAL.equals(timer.getStatus())) {
+                        timer.startMedical();
+                    }
+                }
                 if (Keyboard.getEventKey() == Keyboard.KEY_W) {
                     if (SecondsTimer.RoundStatus.FINISH.equals(timer.getStatus())) {
                         if (score.getcBlue() != score.getcRed()) {
                             WinnerSingleton.instance.setBlue(score.getcBlue() > score.getcRed());
+                            OpenAlSounder.instance.playGong();
                         }
                     }
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_I) {
+                    WinnerSingleton.instance.reset();
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_F) {
                     try {
@@ -79,9 +86,10 @@ public class ActionUtil {
         if (!SecondsTimer.RoundStatus.BREAK.equals(timer.getStatus()) && Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
             if (timer.isRun()) {
                 timer.stop();
+                timer.setContinue();
             } else {
                 timer.startFight();
-                OpenAlSounder.instance.play();
+                OpenAlSounder.instance.playGong();
             }
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_T) {
@@ -101,7 +109,6 @@ public class ActionUtil {
         if (SecondsTimer.RoundStatus.NEXT_ROUND.equals(timer.getStatus())) {
             score.setRound(score.getRound() + 1);
             timer.setSeconds(score.getSettings().getSecondBetweenRounds());
-            timer.breakRound();
             timer.startBreak();
         }
         if (SecondsTimer.RoundStatus.READY.equals(timer.getStatus())) {

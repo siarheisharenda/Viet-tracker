@@ -5,6 +5,7 @@ import com.alex.gl.core.widget.SetupWidget;
 import com.alex.gl.core.widget.helper.FileUtils;
 import com.alex.gl.entity.SettingContainer;
 import com.alex.gl.entity.Settings;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -57,8 +58,33 @@ public class MainFrame extends JFrame {
         startButton.setFocusable(true);
         startButton.grabFocus();
         JPanel panel = new JPanel(new BorderLayout(), true);
+        panel.add(initHelpPanel(), BorderLayout.CENTER);
         panel.add(startButton, BorderLayout.SOUTH);
         add(panel, BorderLayout.CENTER);
+        pack();
+    }
+
+    private JPanel initHelpPanel() {
+        JPanel panel = new JPanel(new GridLayout(8, 2));
+        panel.add(new JLabel("'A' - increase RED point"));
+        panel.add(new JLabel("'A' + 'Left Ctrl' - decrease RED penalty point"));
+        panel.add(new JLabel("'Z' - decrease RED point"));
+        panel.add(new JLabel("'Z' + 'Left Ctrl' - increase RED penalty point"));
+        panel.add(new JLabel("'J' - increase BLUE point"));
+        panel.add(new JLabel("'J' + 'Left Ctrl' - decrease BLUE penalty point"));
+        panel.add(new JLabel("'N' - decrease RED point"));
+        panel.add(new JLabel("'N' + 'Left Ctrl' - increase BLUE penalty point"));
+        panel.add(new JLabel(StringUtils.EMPTY));
+        panel.add(new JLabel(StringUtils.EMPTY));
+        panel.add(new JLabel("'R' - restart match"));
+        panel.add(new JLabel("'W' - resolve winner"));
+        panel.add(new JLabel("'I' - reset winner"));
+        panel.add(new JLabel("'M' - get medical"));
+        panel.add(new JLabel("'SPACE' - start and stop time(medical)"));
+        panel.add(new JLabel("'F' - make fullscreen(window) mode"));
+
+
+        return panel;
     }
 
     private void initMenuBar() {

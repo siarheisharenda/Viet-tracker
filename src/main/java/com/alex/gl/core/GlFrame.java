@@ -49,6 +49,7 @@ public class GlFrame {
     private Controller joystick;
     private int timeXPoint;
     private TrueTypeFont trueFont4;
+    private int halfHeight;
 
     public GlFrame(Settings settings, SettingContainer container) {
         this.settings = settings;
@@ -62,7 +63,7 @@ public class GlFrame {
         initFont();
         initScoreFont();
         initInterface();
-        initTimer(settings.getSecondsInRound());
+        initTimer();
         initControl();
 
         startMainLoop();
@@ -98,6 +99,7 @@ public class GlFrame {
 
     private void displayInit() {
         halfWidth = Display.getWidth() / 2;
+        halfHeight = Display.getHeight() / 2;
         GLUtil.glIniter();
     }
 
@@ -107,7 +109,7 @@ public class GlFrame {
             Font font2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             trueFont2 = new TrueTypeFont(font2.deriveFont(72f), true);
             trueFont3 = new TrueTypeFont(font2.deriveFont(45f), true);
-            trueFont4 = new TrueTypeFont(font2.deriveFont(25f), true);
+            trueFont4 = new TrueTypeFont(font2.deriveFont(20f), true);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -141,8 +143,8 @@ public class GlFrame {
         timeXPoint = timeRect.x + (int) (timeRect.getWidth() * 0.25);
     }
 
-    private void initTimer(int startSeconds) {
-        timer = new SecondsTimer(1000, startSeconds, score);
+    private void initTimer() {
+        timer = new SecondsTimer(settings.getSecondsInRound(), settings.getMedicalBreakTime(), score);
     }
 
     private void startMainLoop() {
@@ -177,9 +179,17 @@ public class GlFrame {
         glRecti(timeRect.x, timeRect.y, timeRect.x2, timeRect.y2);
         glColor3d(0, 0, 0);
         ShapeUtils.drawJoystickQuads(Display.getWidth(), Display.getHeight(), score);
+        WinnerSingleton.instance.checkWin(settings, score, timer);
         if (WinnerSingleton.instance.isBlue() != null) {
-            glColor3ub((byte)0x4F, (byte)0xFF, (byte)0);
+            glColor3ub((byte) 0x4F, (byte) 0xFF, (byte) 0);
             drawRect(WinnerSingleton.instance.isBlue());
+        }
+        if (SecondsTimer.RoundStatus.MEDICAL.equals(timer.getStatus())) {
+            glColor3f(1, 1, 1);
+            glRecti(redRect.x, redRect.y + 100, blueRect.x2, blueRect.y2 - 100);
+            glColor3f(1, 0, 0);
+            glRecti(halfWidth - 10, halfHeight - 55, halfWidth + 10, halfHeight + 55);
+            glRecti(halfWidth - 55, halfHeight + 10, halfWidth + 55, halfHeight - 10);
         }
         stringShow();
         glFlush();
@@ -215,10 +225,11 @@ public class GlFrame {
 
     private void timeDraw() {
         trueFont2.drawString(timeXPoint, timePoint.y, ActionUtil.convertTime(timer.getSeconds()), Color.red);
-        trueFont3.drawString(20, 20, "Round: ", Color.yellow);
-        trueFont3.drawString(timeRect.x * 0.7f, 20, String.valueOf(score.getRound()), Color.yellow);
+        trueFont3.drawString(20, 20, "Round: " + String.valueOf(score.getRound()), Color.yellow);
         trueFont3.drawString(timeRect.x2 * 1.1f, 20, String.valueOf(timer.getStatus()), Color.cyan);
-        trueFont4.drawString(10 , redRect.y2 + 20, "Penalty red: " + String.valueOf(score.getpRed()), Color.magenta);
+        trueFont4.drawString(10, redRect.y2 + 15, "Penalty red: " + String.valueOf(score.getpRed()), Color.red);
+        trueFont4.drawString(blueRect.x + 10, redRect.y2 + 15,
+                "Penalty blue: " + String.valueOf(score.getpBlue()), Color.cyan);
     }
 
     private void keyDetector() {

@@ -2,10 +2,13 @@ package com.alex.gl.core.action;
 
 import static org.lwjgl.openal.AL10.*;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
 import org.lwjgl.util.WaveData;
 import org.newdawn.slick.util.ResourceLoader;
+
+import java.nio.IntBuffer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,9 +19,12 @@ import org.newdawn.slick.util.ResourceLoader;
 public class OpenAlSounder {
 
     public static OpenAlSounder instance = new OpenAlSounder();
+    /** Buffers hold sound data. */
+    IntBuffer buffer = BufferUtils.createIntBuffer(1);
 
-    private int source;
-    private int buffer;
+    /** Sources are points emitting sound. */
+    IntBuffer source = BufferUtils.createIntBuffer(1);
+
     private WaveData data;
 
     private OpenAlSounder() {
@@ -32,21 +38,22 @@ public class OpenAlSounder {
     public void init() {
         try {
             AL.create();
-            buffer = alGenBuffers();
-            alBufferData(buffer, data.format,data.data, data.samplerate);
+            alGenBuffers(buffer);
+            alBufferData(buffer.get(0), data.format, data.data, data.samplerate);
             data.dispose();
-            source = alGenSources();
-            alSourcei(source, AL_BUFFER, buffer);
+            alGenSources(source);
+            alSourcei(source.get(0), AL_BUFFER, buffer.get(0));
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
     }
 
-    public void play() {
-        alSourcePlay(source);
+    public void playGong() {
+        alSourcePlay(source.get(0));
     }
 
     public void destroyAl() {
+        alDeleteSources(source);
         alDeleteBuffers(buffer);
         AL.destroy();
     }
