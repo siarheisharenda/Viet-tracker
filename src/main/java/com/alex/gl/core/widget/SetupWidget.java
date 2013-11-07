@@ -117,7 +117,7 @@ public class SetupWidget extends JDialog {
         value = NumberUtils.createInteger(judgesBox.getSelectedItem().toString());
         settings.setJudges((value > 0) ? value : 5);
         float fvalue = NumberUtils.createFloat(hitDelayField.getText());
-        settings.setHitDelay((fvalue > 0) ? value : 5);
+        settings.setHitDelay((fvalue > 0) ? fvalue : 5);
         value = NumberUtils.createInteger(pointGapField.getText());
         settings.setPointGap((value > 0) ? value : 5);
         value = NumberUtils.createInteger(pointCapField.getText());
