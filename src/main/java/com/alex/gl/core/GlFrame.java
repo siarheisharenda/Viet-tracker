@@ -1,6 +1,7 @@
 package com.alex.gl.core;
 
 import com.alex.gl.core.action.*;
+import com.alex.gl.core.widget.ButtonContainer;
 import com.alex.gl.entity.*;
 
 import net.java.games.input.Controller;
@@ -59,13 +60,12 @@ public class GlFrame {
 
     public void start() {
         hardInit();
+        initControl();
         displayInit();
         initFont();
         initScoreFont();
         initInterface();
         initTimer();
-        initControl();
-
         startMainLoop();
     }
 
@@ -101,6 +101,9 @@ public class GlFrame {
         halfWidth = Display.getWidth() / 2;
         halfHeight = Display.getHeight() / 2;
         GLUtil.glIniter();
+        if (joystick != null) {
+            ButtonContainer.instance.reInitPositions();
+        }
     }
 
     private void initFont() {
@@ -118,7 +121,7 @@ public class GlFrame {
 
     private void initScoreFont() {
         int fontInc = (Display.getWidth() - 1024) / 10;
-        int size = 250 + fontInc;
+        int size = 300 + fontInc;
         Font font = new Font("Arial", Font.BOLD, (size > 350) ? 350 : size);
         trueFont1 = new UnicodeFont(font);
         try {
@@ -178,7 +181,7 @@ public class GlFrame {
         GLUtil.setTimerColor(timer.getStatus());
         glRecti(timeRect.x, timeRect.y, timeRect.x2, timeRect.y2);
         glColor3d(0, 0, 0);
-        ShapeUtils.drawJoystickQuads(Display.getWidth(), Display.getHeight(), score);
+        ShapeUtils.drawJoystickQuads(score);
         WinnerSingleton.instance.checkWin(settings, score, timer);
         if (WinnerSingleton.instance.isBlue() != null) {
             glColor3ub((byte) 0x4F, (byte) 0xFF, (byte) 0);

@@ -6,7 +6,7 @@ package com.alex.gl.entity;
  * Date: 27.10.13
  * Time: 20:13
  */
-public class DBoolean implements Runnable {
+public class DBoolean extends JoyButton implements Runnable {
 
     private static float delay;
     private static int judges;
@@ -15,6 +15,7 @@ public class DBoolean implements Runnable {
     private boolean hit = false;
     private boolean blue = false;
     private boolean released = true;
+    private boolean doubleClick = false;
 
     public DBoolean(boolean blue) {
         this.blue = blue;
@@ -64,6 +65,15 @@ public class DBoolean implements Runnable {
         return blue;
     }
 
+    public synchronized boolean isDoubleClick() {
+        return doubleClick;
+    }
+
+    public synchronized void setDoubleClick(boolean doubleClick) {
+        this.doubleClick = doubleClick;
+        released = false;
+    }
+
     @Override
     public void run() {
         run = true;
@@ -73,6 +83,7 @@ public class DBoolean implements Runnable {
         } finally {
             run = false;
             hit = false;
+            setDoubleClick(false);
         }
     }
 }

@@ -72,7 +72,7 @@ public class MainFrame extends JFrame {
         panel.add(new JLabel("'Z' + 'Left Ctrl' - increase RED penalty point"));
         panel.add(new JLabel("'J' - increase BLUE point"));
         panel.add(new JLabel("'J' + 'Left Ctrl' - decrease BLUE penalty point"));
-        panel.add(new JLabel("'N' - decrease RED point"));
+        panel.add(new JLabel("'N' - decrease BLUE point"));
         panel.add(new JLabel("'N' + 'Left Ctrl' - increase BLUE penalty point"));
         panel.add(new JLabel(StringUtils.EMPTY));
         panel.add(new JLabel(StringUtils.EMPTY));

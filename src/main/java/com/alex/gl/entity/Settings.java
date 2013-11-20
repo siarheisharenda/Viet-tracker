@@ -1,7 +1,5 @@
 package com.alex.gl.entity;
 
-import org.lwjgl.opengl.DisplayMode;
-
 import java.io.Serializable;
 
 /**

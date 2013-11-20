@@ -1,5 +1,6 @@
 package com.alex.gl.core.action;
 
+import com.alex.gl.core.widget.ButtonContainer;
 import com.alex.gl.entity.DBoolean;
 import com.alex.gl.entity.Score;
 import net.java.games.input.Component;
@@ -83,13 +84,16 @@ public class ActionUtil {
     }
 
     public static void timeSwitcher(SecondsTimer timer) {
-        if (!SecondsTimer.RoundStatus.BREAK.equals(timer.getStatus()) && Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
+        if (!SecondsTimer.RoundStatus.BREAK.equals(timer.getStatus()) && Keyboard.getEventKey() == Keyboard.KEY_SPACE
+                && !SecondsTimer.RoundStatus.FINISH.equals(timer.getStatus())) {
             if (timer.isRun()) {
                 timer.stop();
                 timer.setContinue();
             } else {
+                if (!SecondsTimer.RoundStatus.PAUSE.equals(timer.getStatus())) {
+                    OpenAlSounder.instance.playGong();
+                }
                 timer.startFight();
-                OpenAlSounder.instance.playGong();
             }
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_T) {
@@ -109,6 +113,7 @@ public class ActionUtil {
         if (SecondsTimer.RoundStatus.NEXT_ROUND.equals(timer.getStatus())) {
             score.setRound(score.getRound() + 1);
             timer.setSeconds(score.getSettings().getSecondBetweenRounds());
+            OpenAlSounder.instance.playGong();
             timer.startBreak();
         }
         if (SecondsTimer.RoundStatus.READY.equals(timer.getStatus())) {
@@ -138,21 +143,11 @@ public class ActionUtil {
             }
             buttonsEnd = buttonOffset + DBoolean.getJudges() * 2;
         }
-
         return joystick;
     }
 
     static int buttonOffset;
     static int buttonsEnd;
-    static DBoolean b1 = new DBoolean();
-    static DBoolean b2 = new DBoolean(true);
-    static DBoolean b3 = new DBoolean();
-    static DBoolean b4 = new DBoolean(true);
-    static DBoolean b5 = new DBoolean();
-    static DBoolean b6 = new DBoolean(true);
-    static DBoolean b7 = new DBoolean();
-    static DBoolean b8 = new DBoolean(true);
-    static DBoolean[] buttons = new DBoolean[]{b1, b2, b3, b4, b5, b6, b7, b8};
 
     public static void joyDetect(Controller controller) {
         controller.poll();
@@ -161,17 +156,22 @@ public class ActionUtil {
             if (components[i].getPollData() >= 1f) {
                 startButton(i - buttonOffset);
             } else {
-                buttons[i - buttonOffset].release();
+                ButtonContainer.instance.getButtons()[i - buttonOffset].release();
             }
         }
     }
 
     private static void startButton(int indexButton) {
-        DBoolean button = buttons[indexButton];
-        DBoolean appositeButton = buttons[isEven(indexButton) ? indexButton + 1 : indexButton - 1];
-        if (!appositeButton.isHit() && !button.isRun() && button.isReleased()) {
-            button.hit();
-            new Thread(button).start();
+        DBoolean button = ButtonContainer.instance.getButtons()[indexButton];
+        DBoolean appositeButton = ButtonContainer
+                .instance.getButtons()[isEven(indexButton) ? indexButton + 1 : indexButton - 1];
+        if (!appositeButton.isHit() && button.isReleased()) {
+            if (!button.isRun() && !button.isDoubleClick()) {
+                button.hit();
+                new Thread(button).start();
+            } else {
+                button.setDoubleClick(true);
+            }
         }
     }
 
