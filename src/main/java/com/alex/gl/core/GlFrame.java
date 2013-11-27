@@ -33,6 +33,7 @@ public class GlFrame {
 
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 600;
+    private static final String WINDOW_TITLE = "Vovinam Viet Vo Dao";
     private UnicodeFont trueFont1;
     private TrueTypeFont trueFont2;
     private TrueTypeFont trueFont3;
@@ -85,7 +86,7 @@ public class GlFrame {
             }
             Display.setDisplayMode(displayMode);
             Display.setResizable(true);
-            Display.setTitle("Vovinam Viet Vo Dao");
+            Display.setTitle(WINDOW_TITLE);
             Display.setVSyncEnabled(true);
             Display.setFullscreen(true);
             Display.create();

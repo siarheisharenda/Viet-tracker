@@ -79,6 +79,8 @@ public class Score {
     public void reset() {
         cRed = 0;
         cBlue = 0;
+        pBlue = 0;
+        pRed = 0;
         redDelta = 0;
         blueDelta = 0;
         round = 1;

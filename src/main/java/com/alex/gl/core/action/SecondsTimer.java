@@ -80,7 +80,7 @@ public class SecondsTimer implements Runnable {
                     break;
                 case MEDICAL:
                     count();
-                    status = RoundStatus.READY;
+                    status = RoundStatus.PAUSE;
                     seconds = snapShot;
                     snapShot = 0;
                     break;
