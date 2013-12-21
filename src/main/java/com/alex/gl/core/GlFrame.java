@@ -37,6 +37,8 @@ public class GlFrame {
     private UnicodeFont trueFont1;
     private TrueTypeFont trueFont2;
     private TrueTypeFont trueFont3;
+    private TrueTypeFont trueFont4;
+    private TrueTypeFont trueFont5;
     private int halfWidth;
     private int rightBorderOffset;
     private int topBorderOffset;
@@ -50,7 +52,6 @@ public class GlFrame {
     private SettingContainer container;
     private Controller joystick;
     private int timeXPoint;
-    private TrueTypeFont trueFont4;
     private int halfHeight;
 
     public GlFrame(Settings settings, SettingContainer container) {
@@ -114,6 +115,7 @@ public class GlFrame {
             trueFont2 = new TrueTypeFont(font2.deriveFont(72f), true);
             trueFont3 = new TrueTypeFont(font2.deriveFont(45f), true);
             trueFont4 = new TrueTypeFont(font2.deriveFont(20f), true);
+            trueFont5 = new TrueTypeFont(font2.deriveFont(55f), true);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -191,9 +193,9 @@ public class GlFrame {
         if (SecondsTimer.RoundStatus.MEDICAL.equals(timer.getStatus())) {
             glColor3f(1, 1, 1);
             glRecti(redRect.x, redRect.y + 100, blueRect.x2, blueRect.y2 - 100);
-            glColor3f(1, 0, 0);
-            glRecti(halfWidth - 10, halfHeight - 55, halfWidth + 10, halfHeight + 55);
-            glRecti(halfWidth - 55, halfHeight + 10, halfWidth + 55, halfHeight - 10);
+            glEnable(GL_BLEND);
+            trueFont5.drawString(timePoint.x - 20, halfHeight - 10, "MEDICAL", Color.blue);
+            glDisable(GL_BLEND);
         }
         stringShow();
         glFlush();
