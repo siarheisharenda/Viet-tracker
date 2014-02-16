@@ -22,6 +22,11 @@ public class WinnerSingleton {
         return blue;
     }
 
+    /**
+     * Sets true if won blue.
+     * Sets null if winner has been unsigned.
+     * @param blue - true if won blue.
+     */
     public void setBlue(Boolean blue) {
         this.blue = blue;
     }

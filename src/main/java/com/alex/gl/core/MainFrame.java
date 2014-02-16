@@ -6,17 +6,11 @@ import com.alex.gl.core.widget.helper.FileUtils;
 import com.alex.gl.entity.SettingContainer;
 import com.alex.gl.entity.Settings;
 import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.logging.Logger;
 
 /**
@@ -39,7 +33,8 @@ public class MainFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(400, 300);
-        setLocation((int) ((screenSize.getWidth() - getWidth()) / 2), (int) ((screenSize.getHeight() - getHeight()) / 2));
+        setLocation((int) ((screenSize.getWidth() - getWidth()) / 2),
+                (int) ((screenSize.getHeight() - getHeight()) / 2));
         setTitle("VoViet");
         setResizable(false);
         initLayout();
@@ -66,24 +61,22 @@ public class MainFrame extends JFrame {
 
     private JPanel initHelpPanel() {
         JPanel panel = new JPanel(new GridLayout(8, 2));
-        panel.add(new JLabel("'A' - increase RED point"));
+        panel.add(new JLabel("'Q' - increase RED point"));
+        panel.add(new JLabel("'Q' + 'Left Ctrl' - decrease RED point"));
+        panel.add(new JLabel("'A' - increase RED penalty point"));
         panel.add(new JLabel("'A' + 'Left Ctrl' - decrease RED penalty point"));
-        panel.add(new JLabel("'Z' - decrease RED point"));
-        panel.add(new JLabel("'Z' + 'Left Ctrl' - increase RED penalty point"));
+        panel.add(new JLabel("'O' - increase BLUE point"));
+        panel.add(new JLabel("'O' + 'Left Ctrl' - decrease BLUE point"));
         panel.add(new JLabel("'J' - increase BLUE point"));
         panel.add(new JLabel("'J' + 'Left Ctrl' - decrease BLUE penalty point"));
-        panel.add(new JLabel("'N' - decrease BLUE point"));
-        panel.add(new JLabel("'N' + 'Left Ctrl' - increase BLUE penalty point"));
         panel.add(new JLabel(StringUtils.EMPTY));
         panel.add(new JLabel(StringUtils.EMPTY));
         panel.add(new JLabel("'R' - restart match"));
-        panel.add(new JLabel("'W' - resolve winner"));
-        panel.add(new JLabel("'I' - reset winner"));
+        panel.add(new JLabel("'Y' - resolve winner"));
+        panel.add(new JLabel("'Y' + 'Left Ctrl' - reset winner"));
         panel.add(new JLabel("'M' - get medical"));
         panel.add(new JLabel("'SPACE' - start and stop time(medical)"));
-        panel.add(new JLabel("'F' - make fullscreen(window) mode"));
-
-
+        panel.add(new JLabel("'F' - make full screen(window) mode"));
         return panel;
     }
 
@@ -126,6 +119,9 @@ public class MainFrame extends JFrame {
         parent.add(child);
     }
 
+    /**
+     * Init action with main graphic window.
+     */
     private void initActions() {
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

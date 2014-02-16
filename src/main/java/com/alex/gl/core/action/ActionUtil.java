@@ -25,27 +25,35 @@ public class ActionUtil {
     public static void controlDetect(Score score, SecondsTimer timer) {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
-                if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-                    score.setcRed(score.getcRed() + 1);
-                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-                        score.setpRed(score.getpRed() - 1);
+                if (Keyboard.getEventKey() == Keyboard.KEY_Q) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setcRed(score.getcRed() - 1);
+                    } else {
+                        score.setcRed(score.getcRed() + 1);
                     }
                 }
-                if (Keyboard.getEventKey() == Keyboard.KEY_Z) {
-                    score.setcRed(score.getcRed() - 1);
-                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+                if (Keyboard.getEventKey() == Keyboard.KEY_A) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setpRed(score.getpRed() - 1);
+                    } else {
                         score.setpRed(score.getpRed() + 1);
                     }
                 }
-                if (Keyboard.getEventKey() == Keyboard.KEY_J) {
-                    score.setcBlue(score.getcBlue() + 1);
-                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-                        score.setpBlue(score.getpBlue() - 1);
+                if (Keyboard.getEventKey() == Keyboard.KEY_O) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setcBlue(score.getcBlue() - 1);
+                    } else {
+                        score.setcBlue(score.getcBlue() + 1);
                     }
                 }
-                if (Keyboard.getEventKey() == Keyboard.KEY_N) {
-                    score.setcBlue(score.getcBlue() - 1);
-                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+                if (Keyboard.getEventKey() == Keyboard.KEY_J) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setpBlue(score.getpBlue() - 1);
+                    } else {
                         score.setpBlue(score.getpBlue() + 1);
                     }
                 }
@@ -59,16 +67,16 @@ public class ActionUtil {
                         timer.startMedical();
                     }
                 }
-                if (Keyboard.getEventKey() == Keyboard.KEY_W) {
+                if (Keyboard.getEventKey() == Keyboard.KEY_Y) {
                     if (SecondsTimer.RoundStatus.FINISH.equals(timer.getStatus())) {
-                        if (score.getcBlue() != score.getcRed()) {
+                        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                                || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                            WinnerSingleton.instance.reset();
+                        } else if (score.getcBlue() != score.getcRed()) {
                             WinnerSingleton.instance.setBlue(score.getcBlue() > score.getcRed());
                             OpenAlSounder.instance.playGong();
                         }
                     }
-                }
-                if (Keyboard.getEventKey() == Keyboard.KEY_I) {
-                    WinnerSingleton.instance.reset();
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_F) {
                     try {
