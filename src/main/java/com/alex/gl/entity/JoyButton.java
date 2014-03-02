@@ -34,6 +34,7 @@ public abstract class JoyButton {
         glVertex2d(x + width, y + height);
         glVertex2d(x, y + height);
         glEnd();
+        glFlush();
     }
 
     protected abstract boolean isDoubleClick();

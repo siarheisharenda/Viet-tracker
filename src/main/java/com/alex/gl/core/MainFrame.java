@@ -60,7 +60,7 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel initHelpPanel() {
-        JPanel panel = new JPanel(new GridLayout(8, 2));
+        JPanel panel = new JPanel(new GridLayout(14, 2));
         panel.add(new JLabel("'Q' - increase RED point"));
         panel.add(new JLabel("'Q' + 'Left Ctrl' - decrease RED point"));
         panel.add(new JLabel("'A' - increase RED penalty point"));
@@ -69,6 +69,18 @@ public class MainFrame extends JFrame {
         panel.add(new JLabel("'O' + 'Left Ctrl' - decrease BLUE point"));
         panel.add(new JLabel("'J' - increase BLUE point"));
         panel.add(new JLabel("'J' + 'Left Ctrl' - decrease BLUE penalty point"));
+        panel.add(new JLabel("'W' - set DonChan for red"));
+        panel.add(new JLabel("'W' + 'Left Ctrl' - unset DonChan for red"));
+        panel.add(new JLabel("'P' - set DonChan for blue"));
+        panel.add(new JLabel("'P' + 'Left Ctrl' - unset DonChan for blue"));
+        panel.add(new JLabel("'S' - set Reminder Nhắc nhở for blue"));
+        panel.add(new JLabel("'S' + 'Left Ctrl' - unset Reminder Nhắc nhở for blue"));
+        panel.add(new JLabel("'K' - set Reminder Nhắc nhở for red"));
+        panel.add(new JLabel("'K' + 'Left Ctrl' - unset Reminder Nhắc nhở for red"));
+        panel.add(new JLabel("'D' - set Warning Canh cáo for red"));
+        panel.add(new JLabel("'D' + 'Left Ctrl' - unset Warning Canh cáo for red"));
+        panel.add(new JLabel("'L' - set Warning Canh cáo for blue"));
+        panel.add(new JLabel("'L' + 'Left Ctrl' - unset Warning Canh cáo for blue"));
         panel.add(new JLabel(StringUtils.EMPTY));
         panel.add(new JLabel(StringUtils.EMPTY));
         panel.add(new JLabel("'R' - restart match"));

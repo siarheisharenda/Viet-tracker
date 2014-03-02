@@ -13,12 +13,19 @@ public class Score {
 
     private int cRed;
     private int cBlue;
+    private boolean donRed;
+    private boolean donBlue;
+    private int round = 1;
     private float redDelta;
     private float blueDelta;
-    private int round = 1;
     private Settings settings;
     private int pBlue;
     private int pRed;
+
+    private int remBlue;
+    private int remRed;
+    private int warnBlue;
+    private int warnRed;
 
     public Score(Settings settings) {
         this.settings = settings;
@@ -103,5 +110,61 @@ public class Score {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    public boolean getDonRed() {
+        return donRed;
+    }
+
+    public boolean getDonBlue() {
+        return donBlue;
+    }
+
+    public void setDonRed(boolean donRed) {
+            this.donRed = donRed;
+    }
+
+    public void setDonBlue(boolean donBlue) {
+            this.donBlue = donBlue;
+    }
+
+    public int getRemBlue() {
+        return remBlue;
+    }
+
+    public void setRemBlue(int remBlue) {
+        if (remBlue >= 0) {
+            this.remBlue = remBlue;
+        }
+    }
+
+    public int getRemRed() {
+        return remRed;
+    }
+
+    public void setRemRed(int remRed) {
+        if (remRed >= 0) {
+            this.remRed = remRed;
+        }
+    }
+
+    public int getWarnBlue() {
+        return warnBlue;
+    }
+
+    public void setWarnBlue(int warnBlue) {
+        if (warnBlue >= 0) {
+            this.warnBlue = warnBlue;
+        }
+    }
+
+    public int getWarnRed() {
+        return warnRed;
+    }
+
+    public void setWarnRed(int warnRed) {
+        if (warnRed >= 0) {
+            this.warnRed = warnRed;
+        }
     }
 }

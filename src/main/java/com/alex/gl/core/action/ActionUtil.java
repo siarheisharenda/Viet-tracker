@@ -86,6 +86,54 @@ public class ActionUtil {
                         System.exit(0);
                     }
                 }
+                if (Keyboard.getEventKey() == Keyboard.KEY_W) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setDonRed(false);
+                    } else {
+                        score.setDonRed(true);
+                    }
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_P) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setDonBlue(false);
+                    } else {
+                        score.setDonBlue(true);
+                    }
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_S) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setRemRed(score.getRemRed() - 1);
+                    } else {
+                        score.setRemRed(score.getRemRed() + 1);
+                    }
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_K) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setRemBlue(score.getRemBlue() - 1);
+                    } else {
+                        score.setRemBlue(score.getRemBlue() + 1);
+                    }
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_D) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setWarnRed(score.getWarnRed() - 1);
+                    } else {
+                        score.setWarnRed(score.getWarnRed() + 1);
+                    }
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_L) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        score.setWarnBlue(score.getWarnBlue() - 1);
+                    } else {
+                        score.setWarnBlue(score.getWarnBlue() + 1);
+                    }
+                }
                 timeSwitcher(timer);
             }
         }

@@ -1,9 +1,10 @@
 package com.alex.gl.core;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import com.alex.gl.core.action.*;
 import com.alex.gl.core.widget.ButtonContainer;
 import com.alex.gl.entity.*;
-
 import net.java.games.input.Controller;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -16,12 +17,9 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.util.ResourceLoader;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.InputStream;
-
-import javax.swing.*;
-
-import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +32,11 @@ public class GlFrame {
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 600;
     private static final String WINDOW_TITLE = "Vovinam Viet Vo Dao";
+    public static final String MINUS_POINTS_BLUE_FORMAT = "Minus points blue: %d";
+    public static final String MINUS_POINTS_RED_FORMAT = "Minus points red: %d";
+    public static final String ROUND_FORMAT = "Round: %d";
+    public static final String REMINDER_LABEL = "Reminders:";
+    public static final String WARNING_LABEL = "Warnings:";
     private UnicodeFont trueFont1;
     private TrueTypeFont trueFont2;
     private TrueTypeFont trueFont3;
@@ -114,7 +117,7 @@ public class GlFrame {
             Font font2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             trueFont2 = new TrueTypeFont(font2.deriveFont(72f), true);
             trueFont3 = new TrueTypeFont(font2.deriveFont(45f), true);
-            trueFont4 = new TrueTypeFont(font2.deriveFont(20f), true);
+            trueFont4 = new TrueTypeFont(font2.deriveFont(18f), true);
             trueFont5 = new TrueTypeFont(font2.deriveFont(55f), true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,17 +176,16 @@ public class GlFrame {
         OpenAlSounder.instance.destroyAl();
         Display.destroy();
         score.reset();
+        ImageUtil.resetCache();
     }
 
     private void display() {
-        glClear(GL_COLOR_BUFFER_BIT);
-        glColor3f(1, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         drawRect(false);
-        glColor3f(0, 0, 1);
         drawRect(true);
+        glColor3d(0, 0, 0);
         GLUtil.setTimerColor(timer.getStatus());
         glRecti(timeRect.x, timeRect.y, timeRect.x2, timeRect.y2);
-        glColor3d(0, 0, 0);
         ShapeUtils.drawJoystickQuads(score);
         WinnerSingleton.instance.checkWin(settings, score, timer);
         if (WinnerSingleton.instance.isBlue() != null) {
@@ -197,14 +199,20 @@ public class GlFrame {
             trueFont5.drawString(timePoint.x - 20, halfHeight - 10, "MEDICAL", Color.blue);
             glDisable(GL_BLEND);
         }
+        ShapeUtils.showDonChan(score.getDonRed(), score.getDonBlue());
+        ShapeUtils.drawReminders(redRect.y2 + 30, score.getRemRed(), score.getRemBlue());
+        ShapeUtils.drawWarnings(redRect.y2 + 55, score.getWarnRed(), score.getWarnBlue());
+        ShapeUtils.checkWarningsReminders(score, settings);
         stringShow();
         glFlush();
     }
 
     private void drawRect(boolean isBlue) {
         if (isBlue) {
+            glColor3f(0, 0, 1);
             glRecti(blueRect.x, blueRect.y, blueRect.x2, blueRect.y2);
         } else {
+            glColor3f(1, 0, 0);
             glRecti(redRect.x, redRect.y, redRect.x2, redRect.y2);
         }
     }
@@ -231,11 +239,15 @@ public class GlFrame {
 
     private void timeDraw() {
         trueFont2.drawString(timeXPoint, timePoint.y, ActionUtil.convertTime(timer.getSeconds()), Color.red);
-        trueFont3.drawString(20, 20, "Round: " + String.valueOf(score.getRound()), Color.yellow);
+        trueFont3.drawString(20, 20, String.format(ROUND_FORMAT, score.getRound()), Color.yellow);
         trueFont3.drawString(timeRect.x2 * 1.1f, 20, String.valueOf(timer.getStatus()), Color.cyan);
-        trueFont4.drawString(10, redRect.y2 + 15, "Penalty red: " + String.valueOf(score.getpRed()), Color.red);
-        trueFont4.drawString(blueRect.x + 10, redRect.y2 + 15,
-                "Penalty blue: " + String.valueOf(score.getpBlue()), Color.cyan);
+        trueFont4.drawString(10, redRect.y2 + 5, String.format(MINUS_POINTS_RED_FORMAT, score.getpRed()), Color.red);
+        trueFont4.drawString(10, redRect.y2 + 30, REMINDER_LABEL, Color.red);
+        trueFont4.drawString(10, redRect.y2 + 55, WARNING_LABEL, Color.red);
+        trueFont4.drawString(blueRect.x + 10, redRect.y2 + 5, String.format(MINUS_POINTS_BLUE_FORMAT, score.getpBlue()),
+                Color.cyan);
+        trueFont4.drawString(blueRect.x + 10, redRect.y2 + 30, REMINDER_LABEL, Color.cyan);
+        trueFont4.drawString(blueRect.x + 10, redRect.y2 + 55, WARNING_LABEL, Color.cyan);
     }
 
     private void keyDetector() {

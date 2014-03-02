@@ -20,6 +20,10 @@ public class Settings implements Serializable {
     private int pointGap = 10;
     private int pointCap = 5;
 
+    private int reminderPoint = 5;
+    private int warningPoint = 24;
+    private int totalPoint = 2;
+
     public int getRoundsInMatch() {
         return roundsInMatch;
     }
@@ -82,5 +86,29 @@ public class Settings implements Serializable {
 
     public void setPointCap(int pointCap) {
         this.pointCap = pointCap;
+    }
+
+    public int getReminderPoint() {
+        return reminderPoint;
+    }
+
+    public void setReminderPoint(int reminderPoint) {
+        this.reminderPoint = reminderPoint;
+    }
+
+    public int getWarningPoint() {
+        return warningPoint;
+    }
+
+    public void setWarningPoint(int warningPoint) {
+        this.warningPoint = warningPoint;
+    }
+
+    public int getTotalPoint() {
+        return totalPoint;
+    }
+
+    public void setTotalPoint(int totalPoint) {
+        this.totalPoint = totalPoint;
     }
 }

@@ -11,25 +11,18 @@ import org.lwjgl.opengl.DisplayMode;
 /**
  * Created with IntelliJ IDEA.
  * User: Aisks
- * Date: 12.10.13
+ * Date: 12.z10.13
  * Time: 11:29
  */
 public class GLUtil {
 
     public static void glIniter() {
-        glDisable(GL_TEXTURE_2D);
-        glShadeModel(GL_SMOOTH);
-        glDisable(GL_LIGHTING);
-        glDisable(GL_DEPTH_TEST);
+        glClearColor(0, 0, 0, 0);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        glClearColor(0, 0, 0, 1);
-        glClearDepth(1);
-
+        glViewport(0, 0, Display.getWidth(), Display.getHeight());
         glMatrixMode(GL_MODELVIEW);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glViewport(0, 0, Display.getWidth(), Display.getHeight());
         gluOrtho2D(0, Display.getWidth(), Display.getHeight(), 0);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();

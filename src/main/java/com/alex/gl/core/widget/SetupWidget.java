@@ -31,6 +31,9 @@ public class SetupWidget extends JDialog {
     private JTextField hitDelayField;
     private JTextField pointGapField;
     private JTextField pointCapField;
+    private JTextField reminderPointField;
+    private JTextField warningPointField;
+    private JTextField totalPointField;
 
     public SetupWidget(Frame owner, Settings settings) {
         super(owner, "Setup window");
@@ -45,6 +48,7 @@ public class SetupWidget extends JDialog {
         JTabbedPane pane = new JTabbedPane();
         pane.add("Rounds setup", initSetupLayout());
         pane.add("Control setup", initControlLayout());
+        pane.add("Rule setup", initRuleLayout());
         add(pane, BorderLayout.CENTER);
         initButton();
         injectData();
@@ -56,22 +60,22 @@ public class SetupWidget extends JDialog {
     private JPanel initSetupLayout() {
         JPanel panel = new JPanel(new GridLayout(6, 2));
         panel.add(new JLabel("Rounds in match:"));
-        roundsInMatchField = UIUtils.createField(2);
+        roundsInMatchField = UIUtils.createLimitField(2);
         panel.add(roundsInMatchField);
         panel.add(new JLabel("Seconds in round:"));
-        secondsInRoundField = UIUtils.createField(4);
+        secondsInRoundField = UIUtils.createLimitField(4);
         panel.add(secondsInRoundField);
         panel.add(new JLabel("Seconds between rounds:"));
-        secondsBetweenRounds = UIUtils.createField(4);
+        secondsBetweenRounds = UIUtils.createLimitField(4);
         panel.add(secondsBetweenRounds);
         panel.add(new JLabel("Medical break time:"));
-        medicalBreakTime = UIUtils.createField(3);
+        medicalBreakTime = UIUtils.createLimitField(3);
         panel.add(medicalBreakTime);
         panel.add(new JLabel("Point gap to win:"));
-        pointGapField = UIUtils.createField(2);
+        pointGapField = UIUtils.createLimitField(2);
         panel.add(pointGapField);
         panel.add(new JLabel("Point cap to win:"));
-        pointCapField = UIUtils.createField(2);
+        pointCapField = UIUtils.createLimitField(2);
         panel.add(pointCapField);
         return panel;
     }
@@ -82,8 +86,22 @@ public class SetupWidget extends JDialog {
         judgesBox = new JComboBox<>(new Integer[]{2, 3, 4});
         panel.add(judgesBox);
         panel.add(new JLabel("Hit button delay (sec):"));
-        hitDelayField = UIUtils.createField(3);
+        hitDelayField = UIUtils.createLimitField(3);
         panel.add(hitDelayField);
+        return panel;
+    }
+
+    private JPanel initRuleLayout() {
+        JPanel panel = new JPanel(new GridLayout(2, 3));
+        panel.add(new JLabel("[Reminder Nhắc nhở]  +"));
+        panel.add(new JLabel(" [Warning Canh cáo]  ="));
+        panel.add(new JLabel("[Total]"));
+        reminderPointField = UIUtils.createLimitNumberField(1);
+        warningPointField = UIUtils.createLimitNumberField(1);
+        totalPointField = UIUtils.createLimitNumberField(2);
+        panel.add(reminderPointField);
+        panel.add(warningPointField);
+        panel.add(totalPointField);
         return panel;
     }
 
@@ -122,6 +140,12 @@ public class SetupWidget extends JDialog {
         settings.setPointGap((value > 0) ? value : 5);
         value = NumberUtils.createInteger(pointCapField.getText());
         settings.setPointCap((value > 0) ? value : 5);
+        value = NumberUtils.createInteger(reminderPointField.getText());
+        settings.setReminderPoint(value);
+        value = NumberUtils.createInteger(warningPointField.getText());
+        settings.setWarningPoint(value);
+        value = NumberUtils.createInteger(totalPointField.getText());
+        settings.setTotalPoint(value);
     }
 
     private void injectData() {
@@ -133,6 +157,8 @@ public class SetupWidget extends JDialog {
         hitDelayField.setText(String.valueOf(settings.getHitDelay()));
         pointGapField.setText(String.valueOf(settings.getPointGap()));
         pointCapField.setText(String.valueOf(settings.getPointCap()));
+        reminderPointField.setText(String.valueOf(settings.getReminderPoint()));
+        warningPointField.setText(String.valueOf(settings.getWarningPoint()));
+        totalPointField.setText(String.valueOf(settings.getTotalPoint()));
     }
-
 }

@@ -9,10 +9,17 @@ import javax.swing.*;
  */
 public class UIUtils {
 
-    public static JTextField createField(int limit) {
+    public static JTextField createLimitField(int limit) {
         JTextField field = new JTextField();
         field.setColumns(5);
         field.setDocument(new LimitField(limit));
+        return field;
+    }
+
+    public static JTextField createLimitNumberField(int limit) {
+        JTextField field = new JTextField();
+        field.setColumns(5);
+        field.setDocument(new NumberLimitField(limit));
         return field;
     }
 }
