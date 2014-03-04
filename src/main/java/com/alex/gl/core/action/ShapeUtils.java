@@ -125,6 +125,7 @@ public class ShapeUtils {
             drawCircle(blue_x + 30*i, y, 10, 16);
         }
     }
+
     public static void drawWarnings(int y, int warRed, int warBlue) {
         for (int i = 0; i < warRed; i++) {
             glColor3d(1, 0, 1);
@@ -136,22 +137,17 @@ public class ShapeUtils {
             drawCircle(blue_x + 30*i, y, 10, 16);
         }
     }
+
     public static void checkWarningsReminders(Score score, Settings settings) {
         if (score.getRemBlue() >= settings.getReminderPoint()) {
             score.setRemBlue(0);
             score.setWarnBlue(score.getWarnBlue() + 1);
+            score.setpBlue(settings.getTotalMinusPoint());
         }
         if (score.getRemRed() >= settings.getReminderPoint()) {
             score.setRemRed(0);
             score.setWarnRed(score.getWarnRed() + 1);
-        }
-        if (score.getWarnBlue() >= settings.getWarningPoint()) {
-            score.setWarnBlue(0);
-            score.setcBlue(score.getcBlue() - settings.getTotalPoint());
-        }
-        if (score.getWarnRed() >= settings.getWarningPoint()) {
-            score.setWarnRed(0);
-            score.setcRed(score.getcRed() - settings.getTotalPoint());
+            score.setpRed(settings.getTotalMinusPoint());
         }
     }
 }

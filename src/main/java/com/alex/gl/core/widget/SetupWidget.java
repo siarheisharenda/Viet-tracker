@@ -74,7 +74,7 @@ public class SetupWidget extends JDialog {
         panel.add(new JLabel("Point gap to win:"));
         pointGapField = UIUtils.createLimitField(2);
         panel.add(pointGapField);
-        panel.add(new JLabel("Point cap to win:"));
+        panel.add(new JLabel("Minus point to lose:"));
         pointCapField = UIUtils.createLimitField(2);
         panel.add(pointCapField);
         return panel;
@@ -93,14 +93,13 @@ public class SetupWidget extends JDialog {
 
     private JPanel initRuleLayout() {
         JPanel panel = new JPanel(new GridLayout(2, 3));
-        panel.add(new JLabel("[Reminder Nhắc nhở]  +"));
-        panel.add(new JLabel(" [Warning Canh cáo]  ="));
-        panel.add(new JLabel("[Total]"));
+        panel.add(new JLabel("[Reminder Nhac nho]  ="));
+        panel.add(new JLabel(" [Warning Canh cao]  ="));
+        panel.add(new JLabel("[Total Minus point]"));
         reminderPointField = UIUtils.createLimitNumberField(1);
-        warningPointField = UIUtils.createLimitNumberField(1);
         totalPointField = UIUtils.createLimitNumberField(2);
         panel.add(reminderPointField);
-        panel.add(warningPointField);
+        panel.add(new JLabel("1"));
         panel.add(totalPointField);
         return panel;
     }
@@ -142,8 +141,6 @@ public class SetupWidget extends JDialog {
         settings.setPointCap((value > 0) ? value : 5);
         value = NumberUtils.createInteger(reminderPointField.getText());
         settings.setReminderPoint(value);
-        value = NumberUtils.createInteger(warningPointField.getText());
-        settings.setWarningPoint(value);
         value = NumberUtils.createInteger(totalPointField.getText());
         settings.setTotalPoint(value);
     }
@@ -158,7 +155,6 @@ public class SetupWidget extends JDialog {
         pointGapField.setText(String.valueOf(settings.getPointGap()));
         pointCapField.setText(String.valueOf(settings.getPointCap()));
         reminderPointField.setText(String.valueOf(settings.getReminderPoint()));
-        warningPointField.setText(String.valueOf(settings.getWarningPoint()));
-        totalPointField.setText(String.valueOf(settings.getTotalPoint()));
+        totalPointField.setText(String.valueOf(settings.getTotalMinusPoint()));
     }
 }

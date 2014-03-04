@@ -9,7 +9,7 @@ package com.alex.gl.entity;
 public class Score {
 
     private final float POSITIVE_DELTA = 0.3f;
-    private final float NEGATIVE_DELTA = 0.6f;
+    private final float NEGATIVE_DELTA = 0.8f;
 
     private int cRed;
     private int cBlue;
@@ -59,9 +59,10 @@ public class Score {
         return pBlue;
     }
 
-    public void setpBlue(int pBlue) {
-        if (pBlue > -1) {
-            this.pBlue = pBlue;
+    public void setpBlue(int step) {
+        if (pBlue + step> -1) {
+            this.pBlue += step;
+            setcBlue(this.cBlue - step);
         }
     }
 
@@ -69,9 +70,10 @@ public class Score {
         return pRed;
     }
 
-    public void setpRed(int pRed) {
-        if (pRed > -1) {
-            this.pRed = pRed;
+    public void setpRed(int step) {
+        if (pRed + step > -1) {
+            this.pRed += step;
+            setcRed(this.cRed - step);
         }
     }
 
@@ -91,6 +93,10 @@ public class Score {
         redDelta = 0;
         blueDelta = 0;
         round = 1;
+        remRed = 0;
+        remBlue = 0;
+        warnBlue = 0;
+        warnRed = 0;
     }
 
     private boolean isAllow(int count) {
@@ -121,11 +127,11 @@ public class Score {
     }
 
     public void setDonRed(boolean donRed) {
-            this.donRed = donRed;
+        this.donRed = donRed;
     }
 
     public void setDonBlue(boolean donBlue) {
-            this.donBlue = donBlue;
+        this.donBlue = donBlue;
     }
 
     public int getRemBlue() {

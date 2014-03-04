@@ -104,7 +104,7 @@ public class Settings implements Serializable {
         this.warningPoint = warningPoint;
     }
 
-    public int getTotalPoint() {
+    public int getTotalMinusPoint() {
         return totalPoint;
     }
 

@@ -176,12 +176,16 @@ public class GlFrame {
         OpenAlSounder.instance.destroyAl();
         Display.destroy();
         score.reset();
+        WinnerSingleton.instance.setBlue(null);
+        timer.reset();
         ImageUtil.resetCache();
     }
 
     private void display() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glColor3f(0, 0, 1);
         drawRect(false);
+        glColor3f(1, 0, 0);
         drawRect(true);
         glColor3d(0, 0, 0);
         GLUtil.setTimerColor(timer.getStatus());
@@ -209,10 +213,8 @@ public class GlFrame {
 
     private void drawRect(boolean isBlue) {
         if (isBlue) {
-            glColor3f(0, 0, 1);
             glRecti(blueRect.x, blueRect.y, blueRect.x2, blueRect.y2);
         } else {
-            glColor3f(1, 0, 0);
             glRecti(redRect.x, redRect.y, redRect.x2, redRect.y2);
         }
     }

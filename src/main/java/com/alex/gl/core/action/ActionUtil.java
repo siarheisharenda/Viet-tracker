@@ -3,14 +3,13 @@ package com.alex.gl.core.action;
 import com.alex.gl.core.widget.ButtonContainer;
 import com.alex.gl.entity.DBoolean;
 import com.alex.gl.entity.Score;
+import java.util.logging.Logger;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
-
-import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,9 +35,9 @@ public class ActionUtil {
                 if (Keyboard.getEventKey() == Keyboard.KEY_A) {
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
                             || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
-                        score.setpRed(score.getpRed() - 1);
+                        score.setpRed(-1);
                     } else {
-                        score.setpRed(score.getpRed() + 1);
+                        score.setpRed(1);
                     }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_O) {
@@ -52,9 +51,9 @@ public class ActionUtil {
                 if (Keyboard.getEventKey() == Keyboard.KEY_J) {
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
                             || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
-                        score.setpBlue(score.getpBlue() - 1);
+                        score.setpBlue(-1);
                     } else {
-                        score.setpBlue(score.getpBlue() + 1);
+                        score.setpBlue(1);
                     }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_R) {
@@ -68,14 +67,12 @@ public class ActionUtil {
                     }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_Y) {
-                    if (SecondsTimer.RoundStatus.FINISH.equals(timer.getStatus())) {
-                        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
-                                || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
-                            WinnerSingleton.instance.reset();
-                        } else if (score.getcBlue() != score.getcRed()) {
-                            WinnerSingleton.instance.setBlue(score.getcBlue() > score.getcRed());
-                            OpenAlSounder.instance.playGong();
-                        }
+                    if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
+                            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+                        WinnerSingleton.instance.reset();
+                    } else if (score.getcBlue() != score.getcRed()) {
+                        WinnerSingleton.instance.setBlue(score.getcBlue() > score.getcRed());
+                        OpenAlSounder.instance.playGong();
                     }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_F) {
@@ -122,16 +119,20 @@ public class ActionUtil {
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
                             || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
                         score.setWarnRed(score.getWarnRed() - 1);
+                        score.setpRed(-score.getSettings().getTotalMinusPoint());
                     } else {
                         score.setWarnRed(score.getWarnRed() + 1);
+                        score.setpRed(score.getSettings().getTotalMinusPoint());
                     }
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_L) {
                     if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
                             || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
                         score.setWarnBlue(score.getWarnBlue() - 1);
+                        score.setpBlue(-score.getSettings().getTotalMinusPoint());
                     } else {
                         score.setWarnBlue(score.getWarnBlue() + 1);
+                        score.setpBlue(score.getSettings().getTotalMinusPoint());
                     }
                 }
                 timeSwitcher(timer);
