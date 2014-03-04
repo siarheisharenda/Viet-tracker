@@ -3,6 +3,7 @@ build
 out
 pf_tempesta_five
 
+.gradle
 # IntelliJ project files 
 *.iml
 *.iws
