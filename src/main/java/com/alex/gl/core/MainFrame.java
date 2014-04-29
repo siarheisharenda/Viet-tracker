@@ -27,6 +27,7 @@ public class MainFrame extends JFrame {
     private JButton startButton;
     private Settings settings;
     private SettingContainer container = new SettingContainer();
+    private GraphicsWidget graphicsWidget = new GraphicsWidget(this, container);;
 
     public MainFrame() {
         settings = loadSettings();
@@ -118,7 +119,7 @@ public class MainFrame extends JFrame {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GraphicsWidget(self, container);
+               graphicsWidget.showWindow();
             }
         });
         addComponent(jMenuSettings, menuItem);

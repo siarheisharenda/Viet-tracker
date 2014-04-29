@@ -1,10 +1,43 @@
 package com.alex.gl.core;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_ALL_ATTRIB_BITS;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glColor3d;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glColor3ub;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glFlush;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushAttrib;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRecti;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
 
-import com.alex.gl.core.action.*;
+import com.alex.gl.core.action.ActionUtil;
+import com.alex.gl.core.action.GLUtil;
+import com.alex.gl.core.action.ImageUtil;
+import com.alex.gl.core.action.OpenAlSounder;
+import com.alex.gl.core.action.SecondsTimer;
+import com.alex.gl.core.action.ShapeUtils;
+import com.alex.gl.core.action.WinnerSingleton;
 import com.alex.gl.core.widget.ButtonContainer;
-import com.alex.gl.entity.*;
+import com.alex.gl.entity.DBoolean;
+import com.alex.gl.entity.Rect;
+import com.alex.gl.entity.Score;
+import com.alex.gl.entity.SettingContainer;
+import com.alex.gl.entity.Settings;
+import java.awt.*;
+import java.io.InputStream;
+import javax.swing.*;
 import net.java.games.input.Controller;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -17,10 +50,6 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.util.ResourceLoader;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.InputStream;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Aisks
@@ -29,33 +58,33 @@ import java.io.InputStream;
  */
 public class GlFrame {
 
-    private static final int WIDTH = 1024;
-    private static final int HEIGHT = 600;
-    private static final String WINDOW_TITLE = "Vovinam Viet Vo Dao";
-    public static final String MINUS_POINTS_BLUE_FORMAT = "Minus points blue: %d";
-    public static final String MINUS_POINTS_RED_FORMAT = "Minus points red: %d";
-    public static final String ROUND_FORMAT = "Round: %d";
-    public static final String REMINDER_LABEL = "Reminders:";
-    public static final String WARNING_LABEL = "Warnings:";
-    private UnicodeFont trueFont1;
-    private TrueTypeFont trueFont2;
-    private TrueTypeFont trueFont3;
-    private TrueTypeFont trueFont4;
-    private TrueTypeFont trueFont5;
-    private int halfWidth;
-    private int rightBorderOffset;
-    private int topBorderOffset;
-    private Score score;
-    private Rect timeRect;
-    private Rect redRect;
-    private Rect blueRect;
-    private Point timePoint;
-    private SecondsTimer timer;
-    private Settings settings;
-    private SettingContainer container;
-    private Controller joystick;
-    private int timeXPoint;
-    private int halfHeight;
+private static final int WIDTH = 1024;
+private static final int HEIGHT = 600;
+private static final String WINDOW_TITLE = "Vovinam Viet Vo Dao";
+public static final String MINUS_POINTS_BLUE_FORMAT = "Minus points blue: %d";
+public static final String MINUS_POINTS_RED_FORMAT = "Minus points red: %d";
+public static final String ROUND_FORMAT = "Round: %d";
+public static final String REMINDER_LABEL = "Reminders:";
+public static final String WARNING_LABEL = "Warnings:";
+private UnicodeFont trueFont1;
+private TrueTypeFont trueFont2;
+private TrueTypeFont trueFont3;
+private TrueTypeFont trueFont4;
+private TrueTypeFont trueFont5;
+private int halfWidth;
+private int rightBorderOffset;
+private int topBorderOffset;
+private Score score;
+private Rect timeRect;
+private Rect redRect;
+private Rect blueRect;
+private Point timePoint;
+private SecondsTimer timer;
+private Settings settings;
+private SettingContainer container;
+private Controller joystick;
+private int timeXPoint;
+private int halfHeight;
 
     public GlFrame(Settings settings, SettingContainer container) {
         this.settings = settings;
@@ -144,8 +173,9 @@ public class GlFrame {
         int topBorder = (int) (Display.getHeight() * 0.15);
         int bottomBorder = (int) (Display.getHeight() * 0.85);
         timeRect = new Rect(halfWidth - 200, 0, halfWidth + 200, topBorder);
-        redRect = new Rect(0, topBorder, halfWidth, bottomBorder);
-        blueRect = new Rect(halfWidth, topBorder, Display.getWidth(), bottomBorder);
+        redRect = new Rect(ButtonContainer.QUAD_WIDTH + (int) GLUtil.LINE_WIDTH, topBorder, halfWidth, bottomBorder);
+        blueRect = new Rect(halfWidth, topBorder, Display.getWidth() - ButtonContainer.QUAD_WIDTH -
+                (int) GLUtil.LINE_WIDTH, bottomBorder);
         timePoint = new Point(timeRect.x + 90, timeRect.y + 15);
         rightBorderOffset = (int) (redRect.getWidth() * 0.35);
         topBorderOffset = redRect.y + (int) (redRect.getHeight() * 0.2);
@@ -183,9 +213,9 @@ public class GlFrame {
 
     private void display() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glColor3f(0, 0, 1);
-        drawRect(false);
         glColor3f(1, 0, 0);
+        drawRect(false);
+        glColor3f(0, 0, 1);
         drawRect(true);
         glColor3d(0, 0, 0);
         GLUtil.setTimerColor(timer.getStatus());
@@ -241,11 +271,12 @@ public class GlFrame {
 
     private void timeDraw() {
         trueFont2.drawString(timeXPoint, timePoint.y, ActionUtil.convertTime(timer.getSeconds()), Color.red);
-        trueFont3.drawString(20, 20, String.format(ROUND_FORMAT, score.getRound()), Color.yellow);
+        trueFont3.drawString(redRect.x + 20, 20, String.format(ROUND_FORMAT, score.getRound()), Color.yellow);
         trueFont3.drawString(timeRect.x2 * 1.1f, 20, String.valueOf(timer.getStatus()), Color.cyan);
-        trueFont4.drawString(10, redRect.y2 + 5, String.format(MINUS_POINTS_RED_FORMAT, score.getpRed()), Color.red);
-        trueFont4.drawString(10, redRect.y2 + 30, REMINDER_LABEL, Color.red);
-        trueFont4.drawString(10, redRect.y2 + 55, WARNING_LABEL, Color.red);
+        int redX = redRect.x + 10;
+        trueFont4.drawString(redX, redRect.y2 + 5, String.format(MINUS_POINTS_RED_FORMAT, score.getpRed()), Color.red);
+        trueFont4.drawString(redX, redRect.y2 + 30, REMINDER_LABEL, Color.red);
+        trueFont4.drawString(redX, redRect.y2 + 55, WARNING_LABEL, Color.red);
         trueFont4.drawString(blueRect.x + 10, redRect.y2 + 5, String.format(MINUS_POINTS_BLUE_FORMAT, score.getpBlue()),
                 Color.cyan);
         trueFont4.drawString(blueRect.x + 10, redRect.y2 + 30, REMINDER_LABEL, Color.cyan);

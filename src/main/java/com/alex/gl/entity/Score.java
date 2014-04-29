@@ -97,6 +97,8 @@ public class Score {
         remBlue = 0;
         warnBlue = 0;
         warnRed = 0;
+        donRed = false;
+        donBlue = false;
     }
 
     private boolean isAllow(int count) {

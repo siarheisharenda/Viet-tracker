@@ -15,6 +15,7 @@ import static org.lwjgl.opengl.GL11.glTranslated;
 import static org.lwjgl.opengl.GL11.glVertex2d;
 import static org.lwjgl.opengl.GL11.glVertex2i;
 
+import com.alex.gl.core.widget.ButtonContainer;
 import com.alex.gl.entity.DBoolean;
 import com.alex.gl.entity.Score;
 import com.alex.gl.entity.Settings;
@@ -104,37 +105,40 @@ public class ShapeUtils {
     public static void showDonChan(boolean redScore, boolean blueScore) {
         Texture redDonTex = ImageUtil.loadImage(ImageUtil.DONCHAN_RED);
         Texture blueDonTex = ImageUtil.loadImage(ImageUtil.DONCHAN_BLUE);
-        int y = Display.getHeight() - SIZE_IMAGE;
+        int y = Display.getHeight() - (int) (SIZE_IMAGE * 2);
         int half_x = Display.getWidth() / 2;
         if (redScore) {
             drawImage(half_x - SIZE_IMAGE, y, SIZE_IMAGE, SIZE_IMAGE, redDonTex);
         }
         if (blueScore) {
-            drawImage(Display.getWidth() - SIZE_IMAGE, y, SIZE_IMAGE, SIZE_IMAGE, blueDonTex);
+            drawImage(Display.getWidth() - SIZE_IMAGE - ButtonContainer.QUAD_WIDTH, y, SIZE_IMAGE,
+                    SIZE_IMAGE, blueDonTex);
         }
     }
 
     public static void drawReminders(int y, int remRed, int remBlue) {
+        int redReminderOffset = OFFSET_REMINDER + 30;
         for (int i = 0; i < remRed; i++) {
             glColor3d(1, 1, 0);
-            drawCircle(OFFSET_REMINDER + 30*i, y, 10, 16);
+            drawCircle(redReminderOffset + 30 * i, y, 10, 16);
         }
         int blue_x = Display.getWidth() / 2 + OFFSET_REMINDER;
         for (int i = 0; i < remBlue; i++) {
             glColor3d(1, 1, 0);
-            drawCircle(blue_x + 30*i, y, 10, 16);
+            drawCircle(blue_x + 30 * i, y, 10, 16);
         }
     }
 
     public static void drawWarnings(int y, int warRed, int warBlue) {
+        int redWarningOffset = OFFSET_WARNING + 30;
         for (int i = 0; i < warRed; i++) {
             glColor3d(1, 0, 1);
-            drawCircle(OFFSET_WARNING + 30*i, y, 10, 16);
+            drawCircle(redWarningOffset + 30 * i, y, 10, 16);
         }
         int blue_x = Display.getWidth() / 2 + OFFSET_WARNING;
         for (int i = 0; i < warBlue; i++) {
             glColor3d(1, 0, 1);
-            drawCircle(blue_x + 30*i, y, 10, 16);
+            drawCircle(blue_x + 30 * i, y, 10, 16);
         }
     }
 

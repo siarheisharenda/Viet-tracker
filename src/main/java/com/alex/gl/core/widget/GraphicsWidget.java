@@ -27,6 +27,10 @@ public class GraphicsWidget extends JDialog {
         init();
     }
 
+    public void showWindow() {
+        setVisible(true);
+    }
+
     private void init() {
         setLocation(getParent().getLocation());
         setSize(300, 400);
@@ -35,7 +39,6 @@ public class GraphicsWidget extends JDialog {
         initButton();
         pack();
         setResizable(false);
-        setVisible(true);
     }
 
     private void initButton() {
@@ -43,7 +46,7 @@ public class GraphicsWidget extends JDialog {
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                container.setDisplayMode((DisplayMode) jList.getSelectedItem());
+                applyWindowMode();
                 dispose();
             }
         });
@@ -59,6 +62,7 @@ public class GraphicsWidget extends JDialog {
             if (container.getDisplayMode() != null) {
                 jList.setSelectedItem(container.getDisplayMode());
             }
+            applyWindowMode();
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
@@ -77,5 +81,9 @@ public class GraphicsWidget extends JDialog {
                 continue;
             }
         }
+    }
+
+    private void applyWindowMode() {
+        container.setDisplayMode((DisplayMode) jList.getSelectedItem());
     }
 }

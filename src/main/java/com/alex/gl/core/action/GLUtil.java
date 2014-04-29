@@ -16,6 +16,8 @@ import org.lwjgl.opengl.DisplayMode;
  */
 public class GLUtil {
 
+    public static final float LINE_WIDTH = 3f;
+
     public static void glIniter() {
         glClearColor(0, 0, 0, 0);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -26,7 +28,7 @@ public class GLUtil {
         gluOrtho2D(0, Display.getWidth(), Display.getHeight(), 0);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        glLineWidth(3f);
+        glLineWidth(LINE_WIDTH);
     }
 
     public static void attachFullScreenMode(DisplayMode current) {

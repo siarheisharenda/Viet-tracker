@@ -1,7 +1,6 @@
 package com.alex.gl.core.widget;
 
 import com.alex.gl.entity.DBoolean;
-import com.alex.gl.entity.JoyButton;
 import org.lwjgl.opengl.Display;
 
 /**
